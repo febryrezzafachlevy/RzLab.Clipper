@@ -16,18 +16,32 @@ class Program
 
         FFmpeg.SetExecutablesPath(ffmpegPath);
 
-        string video = args.Length > 0 ? args[0] : @"C:\2_WORKSPACE\POC\SAMPLE_VIDEO\SAMPLE_1.mp4";
+        string video = args.Length > 0 ? args[0] : @"D:\LIBRARY\VideoAnalysis\VIDEO\SAMPLE_2.mp4";
 
         var analyzer = new VideoAnalyzer(whisperPath);
 
-        Console.WriteLine("Extracting audio...");
+        // ========== 1 . EXTRACT AUDIO ==========
+        ProgressHelper.WriteProgress("Extracting audio", 0);
         var audio = await analyzer.ExtractAudioAsync(video);
+        ProgressHelper.WriteProgress("Extracting audio", 50);
+        await Task.Delay(300); // buat animasi
+        ProgressHelper.Done("Extracting audio");
 
-        Console.WriteLine("Converting audio...");
+        // ========== 2 . CONVERT AUDIO ==========
+        ProgressHelper.WriteProgress("Converting audio", 0);
         var whisperAudio = await analyzer.ConvertToWhisperWav(audio);
+        ProgressHelper.WriteProgress("Converting audio", 60);
+        await Task.Delay(300);
+        ProgressHelper.Done("Converting audio");
 
-        Console.WriteLine("Transcribing...");
-        var segments = await analyzer.TranscribeAsync(whisperAudio);
+        // ========== 3 . TRANSCRIBING ==========
+        ProgressHelper.WriteProgress("Transcribing", 0);
+
+        var segments = await analyzer.TranscribeAsync(whisperAudio, (p) =>
+        {
+            ProgressHelper.WriteProgress("Transcribing", p);
+        });
+        ProgressHelper.Done("Transcribing");
 
         string transcriptText = string.Join("\n",
             segments.Select(s => $"{s.Start}-{s.End}: {s.Text}"));
@@ -37,8 +51,12 @@ class Program
 
         var summarizer = new AiSummarizer(apiKey, model);
 
-        Console.WriteLine("Calling AI to extract segments...");
-        List<Segment> important = await summarizer.ExtractAsync(transcriptText, duration);
+        // ========== 4 . CALLING AI ==========
+        ProgressHelper.WriteProgress("Calling AI to extract segments", 0);
+        var important = await summarizer.ExtractAsync(transcriptText, duration);
+        ProgressHelper.WriteProgress("Calling AI to extract segments", 80);
+        await Task.Delay(300);
+        ProgressHelper.Done("Calling AI to extract segments");
 
         if (!important.Any())
         {
@@ -46,9 +64,15 @@ class Program
             important = analyzer.DetectImportant(segments);
         }
 
-        Console.WriteLine("Cutting video...");
+        // ========== 5 . CUTTING VIDEO ==========
         var cutter = new FfmpegCutter();
+        ProgressHelper.WriteProgress("Cutting video", 0);
+
         var outputs = await cutter.CutAsync(video, important);
+
+        ProgressHelper.WriteProgress("Cutting video", 70);
+        await Task.Delay(300);
+        ProgressHelper.Done("Cutting video");
 
         Console.WriteLine("DONE. Clips generated:");
         outputs.ForEach(Console.WriteLine);

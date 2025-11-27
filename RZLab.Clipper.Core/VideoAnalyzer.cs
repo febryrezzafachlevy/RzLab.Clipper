@@ -40,8 +40,9 @@ public class VideoAnalyzer
         return outFile;
     }
 
-    // Transcribe
-    public async Task<List<(TimeSpan Start, TimeSpan End, string Text)>> TranscribeAsync(string wavPath)
+    public async Task<List<(TimeSpan Start, TimeSpan End, string Text)>> TranscribeAsync(
+    string wavPath,
+    Action<int> onProgress = null)
     {
         var list = new List<(TimeSpan, TimeSpan, string)>();
 
@@ -50,11 +51,18 @@ public class VideoAnalyzer
 
         using FileStream fs = File.OpenRead(wavPath);
 
+        int progress = 0;
+
         await foreach (var seg in processor.ProcessAsync(fs))
         {
             list.Add((seg.Start, seg.End, seg.Text));
+
+            progress += 2;               // Tambah 2% tiap segmen datang
+            if (progress > 95) progress = 95; // jangan lewat 95%
+            onProgress?.Invoke(progress);
         }
 
+        onProgress?.Invoke(100); // selesai
         return list;
     }
 
