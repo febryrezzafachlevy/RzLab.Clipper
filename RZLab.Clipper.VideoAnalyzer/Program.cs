@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RZLab.Clipper.Core;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -61,6 +62,18 @@ class Program
         Console.WriteLine("FINAL SUMMARY");
         Console.WriteLine("===========================\n");
         Console.WriteLine(summary);
+
+        var emiten = new AIScrenerSahamModel
+        {
+            Emitens = new List<EmitenScrenerSaham>
+            {
+                new EmitenScrenerSaham{ Name = "ADRO", CurrentValue = 1810 },
+                new EmitenScrenerSaham{ Name = "AGRS", CurrentValue = 79 },
+                new EmitenScrenerSaham{ Name = "BIPI", CurrentValue = 94 },
+                new EmitenScrenerSaham{ Name = "DOOH", CurrentValue = 218 },
+                new EmitenScrenerSaham{ Name = "GZCO", CurrentValue = 316 }
+            }
+        };
     }
     //static async Task CreateClipVideo(IConfiguration config, string[] args)
     //{

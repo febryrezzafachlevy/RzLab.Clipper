@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 
+namespace RZLab.Clipper.Core;
 public static class ProgressHelper
 {
     public static void WriteProgress(string title, int percent)

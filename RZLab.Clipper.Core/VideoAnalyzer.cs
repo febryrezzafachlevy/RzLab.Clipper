@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Whisper.net;
 using Xabe.FFmpeg;
 
+namespace RZLab.Clipper.Core;
 public class VideoAnalyzer
 {
     private readonly string whisperPath;

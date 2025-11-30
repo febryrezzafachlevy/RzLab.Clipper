@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Xabe.FFmpeg;
 
+namespace RZLab.Clipper.Core;
 public class FfmpegCutter
 {
     public async Task<List<string>> CutAsync(string inputVideo, List<Segment> segments)
