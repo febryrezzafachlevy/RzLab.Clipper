@@ -128,6 +128,7 @@
             lstView.Size = new Size(746, 319);
             lstView.TabIndex = 1;
             lstView.UseCompatibleStateImageBehavior = false;
+            lstView.View = View.Details;
             lstView.DoubleClick += lstView_DoubleClick;
             // 
             // label4

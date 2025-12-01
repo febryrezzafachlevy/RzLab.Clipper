@@ -55,6 +55,10 @@ namespace RZLab.AIAnalyzer
             this.MouseMove += Form_MouseMove;
             this.MouseUp += Form_MouseUp;
 
+            pbProgress.Value = 0;
+            lblProgressPercent.Text = "0 %";
+            lblStepProgress.Text = $"0 of 0";
+
             StockAnalyzerGridHelper.Setup(lstView);
         }
 
@@ -63,7 +67,7 @@ namespace RZLab.AIAnalyzer
             var data = JsonConvert.DeserializeObject<AIScrenerSahamModel>(File.ReadAllText(txtJsonFilePath.Text));
             if (data == null) return;
 
-            // Reset progress UI
+            //Reset progress UI
             pbProgress.Value = 0;
             lblProgressPercent.Text = "0 %";
             lblStepProgress.Text = $"0 of {data.Emitens.Count}";

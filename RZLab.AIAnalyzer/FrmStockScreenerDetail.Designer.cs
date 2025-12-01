@@ -42,7 +42,7 @@
             rtbDescription = new RichTextBox();
             pnlBody = new Panel();
             pnlBrowseFile = new Panel();
-            lblRR = new Label();
+            lblRR1 = new Label();
             label6 = new Label();
             lblRisk = new Label();
             lblRiskTitle = new Label();
@@ -65,6 +65,10 @@
             lblEntry = new Label();
             label2 = new Label();
             pnlContainer = new Panel();
+            lblRR2 = new Label();
+            label5 = new Label();
+            lblRR3 = new Label();
+            label13 = new Label();
             ((System.ComponentModel.ISupportInitialize)btnClose).BeginInit();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
@@ -105,7 +109,7 @@
             // 
             panel2.Controls.Add(panel3);
             panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(680, 0);
+            panel2.Location = new Point(719, 0);
             panel2.Name = "panel2";
             panel2.Size = new Size(51, 34);
             panel2.TabIndex = 1;
@@ -129,7 +133,7 @@
             pnlHeader.Location = new Point(0, 0);
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Padding = new Padding(10, 0, 0, 0);
-            pnlHeader.Size = new Size(731, 34);
+            pnlHeader.Size = new Size(770, 34);
             pnlHeader.TabIndex = 1;
             // 
             // panel6
@@ -137,17 +141,17 @@
             panel6.Dock = DockStyle.Top;
             panel6.Location = new Point(5, 230);
             panel6.Name = "panel6";
-            panel6.Size = new Size(721, 12);
+            panel6.Size = new Size(760, 12);
             panel6.TabIndex = 5;
             // 
             // lblCurrentValue
             // 
             lblCurrentValue.Font = new Font("Segoe UI", 9F);
             lblCurrentValue.ForeColor = Color.White;
-            lblCurrentValue.Location = new Point(130, 39);
+            lblCurrentValue.Location = new Point(104, 39);
             lblCurrentValue.Margin = new Padding(2, 0, 2, 0);
             lblCurrentValue.Name = "lblCurrentValue";
-            lblCurrentValue.Size = new Size(124, 19);
+            lblCurrentValue.Size = new Size(98, 19);
             lblCurrentValue.TabIndex = 28;
             lblCurrentValue.Text = "0";
             lblCurrentValue.TextAlign = ContentAlignment.MiddleLeft;
@@ -156,10 +160,10 @@
             // 
             label32.Font = new Font("Segoe UI", 9F);
             label32.ForeColor = Color.White;
-            label32.Location = new Point(33, 39);
+            label32.Location = new Point(17, 39);
             label32.Margin = new Padding(2, 0, 2, 0);
             label32.Name = "label32";
-            label32.Size = new Size(88, 19);
+            label32.Size = new Size(87, 19);
             label32.TabIndex = 27;
             label32.Text = "Current Value : ";
             label32.TextAlign = ContentAlignment.MiddleRight;
@@ -168,10 +172,10 @@
             // 
             lblEmiten.Font = new Font("Segoe UI", 9F);
             lblEmiten.ForeColor = Color.White;
-            lblEmiten.Location = new Point(130, 11);
+            lblEmiten.Location = new Point(104, 11);
             lblEmiten.Margin = new Padding(2, 0, 2, 0);
             lblEmiten.Name = "lblEmiten";
-            lblEmiten.Size = new Size(124, 19);
+            lblEmiten.Size = new Size(98, 19);
             lblEmiten.TabIndex = 26;
             lblEmiten.Text = "ADRO";
             lblEmiten.TextAlign = ContentAlignment.MiddleLeft;
@@ -180,10 +184,10 @@
             // 
             lblTitleSystemDrive.Font = new Font("Segoe UI", 9F);
             lblTitleSystemDrive.ForeColor = Color.White;
-            lblTitleSystemDrive.Location = new Point(33, 11);
+            lblTitleSystemDrive.Location = new Point(20, 11);
             lblTitleSystemDrive.Margin = new Padding(2, 0, 2, 0);
             lblTitleSystemDrive.Name = "lblTitleSystemDrive";
-            lblTitleSystemDrive.Size = new Size(88, 19);
+            lblTitleSystemDrive.Size = new Size(84, 19);
             lblTitleSystemDrive.TabIndex = 25;
             lblTitleSystemDrive.Text = "Emiten : ";
             lblTitleSystemDrive.TextAlign = ContentAlignment.MiddleRight;
@@ -195,7 +199,7 @@
             pnlVideo.Dock = DockStyle.Top;
             pnlVideo.Location = new Point(5, 242);
             pnlVideo.Name = "pnlVideo";
-            pnlVideo.Size = new Size(721, 272);
+            pnlVideo.Size = new Size(760, 272);
             pnlVideo.TabIndex = 6;
             // 
             // rtbDescription
@@ -207,7 +211,7 @@
             rtbDescription.Location = new Point(0, 0);
             rtbDescription.Name = "rtbDescription";
             rtbDescription.ReadOnly = true;
-            rtbDescription.Size = new Size(719, 270);
+            rtbDescription.Size = new Size(758, 270);
             rtbDescription.TabIndex = 0;
             rtbDescription.Text = "";
             // 
@@ -221,14 +225,18 @@
             pnlBody.Location = new Point(0, 34);
             pnlBody.Name = "pnlBody";
             pnlBody.Padding = new Padding(5);
-            pnlBody.Size = new Size(731, 522);
+            pnlBody.Size = new Size(770, 522);
             pnlBody.TabIndex = 2;
             // 
             // pnlBrowseFile
             // 
             pnlBrowseFile.BackColor = Color.FromArgb(33, 33, 33);
             pnlBrowseFile.BorderStyle = BorderStyle.FixedSingle;
-            pnlBrowseFile.Controls.Add(lblRR);
+            pnlBrowseFile.Controls.Add(lblRR3);
+            pnlBrowseFile.Controls.Add(label13);
+            pnlBrowseFile.Controls.Add(lblRR2);
+            pnlBrowseFile.Controls.Add(label5);
+            pnlBrowseFile.Controls.Add(lblRR1);
             pnlBrowseFile.Controls.Add(label6);
             pnlBrowseFile.Controls.Add(lblRisk);
             pnlBrowseFile.Controls.Add(lblRiskTitle);
@@ -257,41 +265,41 @@
             pnlBrowseFile.Dock = DockStyle.Top;
             pnlBrowseFile.Location = new Point(5, 5);
             pnlBrowseFile.Name = "pnlBrowseFile";
-            pnlBrowseFile.Size = new Size(721, 225);
+            pnlBrowseFile.Size = new Size(760, 225);
             pnlBrowseFile.TabIndex = 1;
             // 
-            // lblRR
+            // lblRR1
             // 
-            lblRR.Font = new Font("Segoe UI", 9F);
-            lblRR.ForeColor = Color.White;
-            lblRR.Location = new Point(445, 162);
-            lblRR.Margin = new Padding(2, 0, 2, 0);
-            lblRR.Name = "lblRR";
-            lblRR.Size = new Size(184, 19);
-            lblRR.TabIndex = 52;
-            lblRR.Text = "0";
-            lblRR.TextAlign = ContentAlignment.MiddleLeft;
+            lblRR1.Font = new Font("Segoe UI", 9F);
+            lblRR1.ForeColor = Color.White;
+            lblRR1.Location = new Point(542, 15);
+            lblRR1.Margin = new Padding(2, 0, 2, 0);
+            lblRR1.Name = "lblRR1";
+            lblRR1.Size = new Size(87, 19);
+            lblRR1.TabIndex = 52;
+            lblRR1.Text = "0";
+            lblRR1.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // label6
             // 
             label6.Font = new Font("Segoe UI", 9F);
             label6.ForeColor = Color.White;
-            label6.Location = new Point(357, 162);
+            label6.Location = new Point(441, 15);
             label6.Margin = new Padding(2, 0, 2, 0);
             label6.Name = "label6";
-            label6.Size = new Size(79, 19);
+            label6.Size = new Size(92, 19);
             label6.TabIndex = 51;
-            label6.Text = "Risk–Reward : ";
+            label6.Text = "Risk–Reward 1 : ";
             label6.TextAlign = ContentAlignment.MiddleRight;
             // 
             // lblRisk
             // 
             lblRisk.Font = new Font("Segoe UI", 9F);
             lblRisk.ForeColor = Color.White;
-            lblRisk.Location = new Point(445, 85);
+            lblRisk.Location = new Point(282, 85);
             lblRisk.Margin = new Padding(2, 0, 2, 0);
             lblRisk.Name = "lblRisk";
-            lblRisk.Size = new Size(184, 19);
+            lblRisk.Size = new Size(155, 19);
             lblRisk.TabIndex = 50;
             lblRisk.Text = "0";
             lblRisk.TextAlign = ContentAlignment.MiddleLeft;
@@ -300,10 +308,10 @@
             // 
             lblRiskTitle.Font = new Font("Segoe UI", 9F);
             lblRiskTitle.ForeColor = Color.White;
-            lblRiskTitle.Location = new Point(357, 85);
+            lblRiskTitle.Location = new Point(219, 85);
             lblRiskTitle.Margin = new Padding(2, 0, 2, 0);
             lblRiskTitle.Name = "lblRiskTitle";
-            lblRiskTitle.Size = new Size(79, 19);
+            lblRiskTitle.Size = new Size(62, 19);
             lblRiskTitle.TabIndex = 49;
             lblRiskTitle.Text = "Risk : ";
             lblRiskTitle.TextAlign = ContentAlignment.MiddleRight;
@@ -312,10 +320,10 @@
             // 
             lblGrowth.Font = new Font("Segoe UI", 9F);
             lblGrowth.ForeColor = Color.White;
-            lblGrowth.Location = new Point(445, 62);
+            lblGrowth.Location = new Point(282, 62);
             lblGrowth.Margin = new Padding(2, 0, 2, 0);
             lblGrowth.Name = "lblGrowth";
-            lblGrowth.Size = new Size(184, 19);
+            lblGrowth.Size = new Size(155, 19);
             lblGrowth.TabIndex = 48;
             lblGrowth.Text = "0";
             lblGrowth.TextAlign = ContentAlignment.MiddleLeft;
@@ -324,10 +332,10 @@
             // 
             label8.Font = new Font("Segoe UI", 9F);
             label8.ForeColor = Color.White;
-            label8.Location = new Point(357, 62);
+            label8.Location = new Point(219, 62);
             label8.Margin = new Padding(2, 0, 2, 0);
             label8.Name = "label8";
-            label8.Size = new Size(79, 19);
+            label8.Size = new Size(62, 19);
             label8.TabIndex = 47;
             label8.Text = "Growth : ";
             label8.TextAlign = ContentAlignment.MiddleRight;
@@ -336,10 +344,10 @@
             // 
             lblMOAT.Font = new Font("Segoe UI", 9F);
             lblMOAT.ForeColor = Color.White;
-            lblMOAT.Location = new Point(445, 39);
+            lblMOAT.Location = new Point(282, 39);
             lblMOAT.Margin = new Padding(2, 0, 2, 0);
             lblMOAT.Name = "lblMOAT";
-            lblMOAT.Size = new Size(184, 19);
+            lblMOAT.Size = new Size(155, 19);
             lblMOAT.TabIndex = 46;
             lblMOAT.Text = "0";
             lblMOAT.TextAlign = ContentAlignment.MiddleLeft;
@@ -348,10 +356,10 @@
             // 
             lblMOATTitle.Font = new Font("Segoe UI", 9F);
             lblMOATTitle.ForeColor = Color.White;
-            lblMOATTitle.Location = new Point(357, 39);
+            lblMOATTitle.Location = new Point(219, 39);
             lblMOATTitle.Margin = new Padding(2, 0, 2, 0);
             lblMOATTitle.Name = "lblMOATTitle";
-            lblMOATTitle.Size = new Size(79, 19);
+            lblMOATTitle.Size = new Size(62, 19);
             lblMOATTitle.TabIndex = 45;
             lblMOATTitle.Text = "MOAT : ";
             lblMOATTitle.TextAlign = ContentAlignment.MiddleRight;
@@ -360,10 +368,10 @@
             // 
             lblScore.Font = new Font("Segoe UI", 9F);
             lblScore.ForeColor = Color.White;
-            lblScore.Location = new Point(445, 11);
+            lblScore.Location = new Point(282, 11);
             lblScore.Margin = new Padding(2, 0, 2, 0);
             lblScore.Name = "lblScore";
-            lblScore.Size = new Size(184, 19);
+            lblScore.Size = new Size(155, 19);
             lblScore.TabIndex = 44;
             lblScore.Text = "0";
             lblScore.TextAlign = ContentAlignment.MiddleLeft;
@@ -372,10 +380,10 @@
             // 
             label15.Font = new Font("Segoe UI", 9F);
             label15.ForeColor = Color.White;
-            label15.Location = new Point(357, 11);
+            label15.Location = new Point(219, 11);
             label15.Margin = new Padding(2, 0, 2, 0);
             label15.Name = "label15";
-            label15.Size = new Size(79, 19);
+            label15.Size = new Size(62, 19);
             label15.TabIndex = 43;
             label15.Text = "Score : ";
             label15.TextAlign = ContentAlignment.MiddleRight;
@@ -384,7 +392,7 @@
             // 
             lblConfident.Font = new Font("Segoe UI", 9F);
             lblConfident.ForeColor = Color.White;
-            lblConfident.Location = new Point(445, 140);
+            lblConfident.Location = new Point(282, 140);
             lblConfident.Margin = new Padding(2, 0, 2, 0);
             lblConfident.Name = "lblConfident";
             lblConfident.Size = new Size(102, 19);
@@ -396,10 +404,10 @@
             // 
             label12.Font = new Font("Segoe UI", 9F);
             label12.ForeColor = Color.White;
-            label12.Location = new Point(357, 140);
+            label12.Location = new Point(209, 140);
             label12.Margin = new Padding(2, 0, 2, 0);
             label12.Name = "label12";
-            label12.Size = new Size(79, 19);
+            label12.Size = new Size(72, 19);
             label12.TabIndex = 41;
             label12.Text = "Confident : ";
             label12.TextAlign = ContentAlignment.MiddleRight;
@@ -408,10 +416,10 @@
             // 
             lblStopLoss.Font = new Font("Segoe UI", 9F);
             lblStopLoss.ForeColor = Color.White;
-            lblStopLoss.Location = new Point(130, 85);
+            lblStopLoss.Location = new Point(104, 85);
             lblStopLoss.Margin = new Padding(2, 0, 2, 0);
             lblStopLoss.Name = "lblStopLoss";
-            lblStopLoss.Size = new Size(124, 19);
+            lblStopLoss.Size = new Size(98, 19);
             lblStopLoss.TabIndex = 40;
             lblStopLoss.Text = "0";
             lblStopLoss.TextAlign = ContentAlignment.MiddleLeft;
@@ -420,10 +428,10 @@
             // 
             label10.Font = new Font("Segoe UI", 9F);
             label10.ForeColor = Color.White;
-            label10.Location = new Point(33, 85);
+            label10.Location = new Point(20, 85);
             label10.Margin = new Padding(2, 0, 2, 0);
             label10.Name = "label10";
-            label10.Size = new Size(88, 19);
+            label10.Size = new Size(84, 19);
             label10.TabIndex = 39;
             label10.Text = "Stop Loss : ";
             label10.TextAlign = ContentAlignment.MiddleRight;
@@ -432,10 +440,10 @@
             // 
             lblTakeProfit3.Font = new Font("Segoe UI", 9F);
             lblTakeProfit3.ForeColor = Color.White;
-            lblTakeProfit3.Location = new Point(130, 185);
+            lblTakeProfit3.Location = new Point(104, 185);
             lblTakeProfit3.Margin = new Padding(2, 0, 2, 0);
             lblTakeProfit3.Name = "lblTakeProfit3";
-            lblTakeProfit3.Size = new Size(124, 19);
+            lblTakeProfit3.Size = new Size(98, 19);
             lblTakeProfit3.TabIndex = 38;
             lblTakeProfit3.Text = "0";
             lblTakeProfit3.TextAlign = ContentAlignment.MiddleLeft;
@@ -444,10 +452,10 @@
             // 
             label3.Font = new Font("Segoe UI", 9F);
             label3.ForeColor = Color.White;
-            label3.Location = new Point(33, 185);
+            label3.Location = new Point(20, 185);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new Size(88, 19);
+            label3.Size = new Size(84, 19);
             label3.TabIndex = 37;
             label3.Text = "Take Profit 3 : ";
             label3.TextAlign = ContentAlignment.MiddleRight;
@@ -456,10 +464,10 @@
             // 
             lblTakeProfit2.Font = new Font("Segoe UI", 9F);
             lblTakeProfit2.ForeColor = Color.White;
-            lblTakeProfit2.Location = new Point(130, 162);
+            lblTakeProfit2.Location = new Point(104, 162);
             lblTakeProfit2.Margin = new Padding(2, 0, 2, 0);
             lblTakeProfit2.Name = "lblTakeProfit2";
-            lblTakeProfit2.Size = new Size(124, 19);
+            lblTakeProfit2.Size = new Size(98, 19);
             lblTakeProfit2.TabIndex = 36;
             lblTakeProfit2.Text = "0";
             lblTakeProfit2.TextAlign = ContentAlignment.MiddleLeft;
@@ -468,10 +476,10 @@
             // 
             label7.Font = new Font("Segoe UI", 9F);
             label7.ForeColor = Color.White;
-            label7.Location = new Point(30, 162);
+            label7.Location = new Point(17, 162);
             label7.Margin = new Padding(2, 0, 2, 0);
             label7.Name = "label7";
-            label7.Size = new Size(91, 19);
+            label7.Size = new Size(87, 19);
             label7.TabIndex = 35;
             label7.Text = "Take Profit 2 : ";
             label7.TextAlign = ContentAlignment.MiddleRight;
@@ -480,10 +488,10 @@
             // 
             lblTakeProfit1.Font = new Font("Segoe UI", 9F);
             lblTakeProfit1.ForeColor = Color.White;
-            lblTakeProfit1.Location = new Point(130, 140);
+            lblTakeProfit1.Location = new Point(104, 140);
             lblTakeProfit1.Margin = new Padding(2, 0, 2, 0);
             lblTakeProfit1.Name = "lblTakeProfit1";
-            lblTakeProfit1.Size = new Size(124, 19);
+            lblTakeProfit1.Size = new Size(98, 19);
             lblTakeProfit1.TabIndex = 34;
             lblTakeProfit1.Text = "0";
             lblTakeProfit1.TextAlign = ContentAlignment.MiddleLeft;
@@ -492,10 +500,10 @@
             // 
             label9.Font = new Font("Segoe UI", 9F);
             label9.ForeColor = Color.White;
-            label9.Location = new Point(31, 140);
+            label9.Location = new Point(18, 140);
             label9.Margin = new Padding(2, 0, 2, 0);
             label9.Name = "label9";
-            label9.Size = new Size(90, 19);
+            label9.Size = new Size(86, 19);
             label9.TabIndex = 33;
             label9.Text = "Take Profit 1 : ";
             label9.TextAlign = ContentAlignment.MiddleRight;
@@ -504,10 +512,10 @@
             // 
             lblEntry.Font = new Font("Segoe UI", 9F);
             lblEntry.ForeColor = Color.White;
-            lblEntry.Location = new Point(130, 62);
+            lblEntry.Location = new Point(104, 62);
             lblEntry.Margin = new Padding(2, 0, 2, 0);
             lblEntry.Name = "lblEntry";
-            lblEntry.Size = new Size(124, 19);
+            lblEntry.Size = new Size(98, 19);
             lblEntry.TabIndex = 30;
             lblEntry.Text = "0";
             lblEntry.TextAlign = ContentAlignment.MiddleLeft;
@@ -516,10 +524,10 @@
             // 
             label2.Font = new Font("Segoe UI", 9F);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(33, 62);
+            label2.Location = new Point(20, 62);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(88, 19);
+            label2.Size = new Size(84, 19);
             label2.TabIndex = 29;
             label2.Text = "Entry : ";
             label2.TextAlign = ContentAlignment.MiddleRight;
@@ -532,15 +540,63 @@
             pnlContainer.Dock = DockStyle.Fill;
             pnlContainer.Location = new Point(5, 5);
             pnlContainer.Name = "pnlContainer";
-            pnlContainer.Size = new Size(731, 556);
+            pnlContainer.Size = new Size(770, 556);
             pnlContainer.TabIndex = 1;
+            // 
+            // lblRR2
+            // 
+            lblRR2.Font = new Font("Segoe UI", 9F);
+            lblRR2.ForeColor = Color.White;
+            lblRR2.Location = new Point(542, 43);
+            lblRR2.Margin = new Padding(2, 0, 2, 0);
+            lblRR2.Name = "lblRR2";
+            lblRR2.Size = new Size(87, 19);
+            lblRR2.TabIndex = 54;
+            lblRR2.Text = "0";
+            lblRR2.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label5
+            // 
+            label5.Font = new Font("Segoe UI", 9F);
+            label5.ForeColor = Color.White;
+            label5.Location = new Point(441, 43);
+            label5.Margin = new Padding(2, 0, 2, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(92, 19);
+            label5.TabIndex = 53;
+            label5.Text = "Risk–Reward 2 : ";
+            label5.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // lblRR3
+            // 
+            lblRR3.Font = new Font("Segoe UI", 9F);
+            lblRR3.ForeColor = Color.White;
+            lblRR3.Location = new Point(542, 66);
+            lblRR3.Margin = new Padding(2, 0, 2, 0);
+            lblRR3.Name = "lblRR3";
+            lblRR3.Size = new Size(87, 19);
+            lblRR3.TabIndex = 56;
+            lblRR3.Text = "0";
+            lblRR3.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label13
+            // 
+            label13.Font = new Font("Segoe UI", 9F);
+            label13.ForeColor = Color.White;
+            label13.Location = new Point(441, 66);
+            label13.Margin = new Padding(2, 0, 2, 0);
+            label13.Name = "label13";
+            label13.Size = new Size(92, 19);
+            label13.TabIndex = 55;
+            label13.Text = "Risk–Reward 3 : ";
+            label13.TextAlign = ContentAlignment.MiddleRight;
             // 
             // FrmStockScreenerDetail
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DimGray;
-            ClientSize = new Size(741, 566);
+            ClientSize = new Size(780, 566);
             Controls.Add(pnlContainer);
             FormBorderStyle = FormBorderStyle.None;
             Name = "FrmStockScreenerDetail";
@@ -595,7 +651,11 @@
         private Label lblMOATTitle;
         private Label lblScore;
         private Label label15;
-        private Label lblRR;
+        private Label lblRR1;
         private Label label6;
+        private Label lblRR3;
+        private Label label13;
+        private Label lblRR2;
+        private Label label5;
     }
 }

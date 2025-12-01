@@ -40,17 +40,28 @@ namespace RZLab.AIAnalyzer
             lblMOAT.Text = _emitenScrenerResult.MoatType??"";
             lblGrowth.Text = _emitenScrenerResult.GrowthType ?? "";
             lblRisk.Text = _emitenScrenerResult.RiskLevel ?? "";
-            lblRR.Text = _emitenScrenerResult.RR1.ToString() + " / " + _emitenScrenerResult.RR2.ToString() + " / " + _emitenScrenerResult.RR3.ToString();
+            lblRR1.Text = " 1:" + _emitenScrenerResult.RR1.ToString();
+            lblRR2.Text = " 1:" + _emitenScrenerResult.RR2.ToString();
+            lblRR3.Text = " 1:" + _emitenScrenerResult.RR3.ToString();
 
             if (!string.IsNullOrEmpty(_emitenScrenerResult.Reason))
             {
+                rtbDescription.AppendText(_emitenScrenerResult.Reason);
                 var reasons = _emitenScrenerResult.Reason.Split(";");
-                foreach (var reason in reasons)
-                {
-                    rtbDescription.AppendText(reason);
-                }
+                //if(reasons.Length > 1)
+                //{
+                //    var reason = string.Join(Environment.NewLine, reasons);
+                //    rtbDescription.AppendText(reason);
+                //}
+                //else
+                //{
+                //    reasons = _emitenScrenerResult.Reason.Split('.');
+                //    var reason = string.Join(Environment.NewLine, reasons); 
+                //    rtbDescription.AppendText(reason);
+                //}
+
                 FormatRichTextBox(rtbDescription);
-                AddLeftAccent(rtbDescription);
+                //AddLeftAccent(rtbDescription);
                 HighlightKeywords(rtbDescription);
             }
         }
@@ -105,7 +116,10 @@ namespace RZLab.AIAnalyzer
             string[] lines = rtb.Text.Split('\n');
             for (int i = 0; i < lines.Length; i++)
             {
-                lines[i] = "│  " + lines[i].Trim();
+                if (!string.IsNullOrEmpty(lines[i]))
+                {
+                    lines[i] = "│  " + lines[i].Trim()+".";
+                }
             }
 
             rtb.Text = string.Join("\n", lines);
