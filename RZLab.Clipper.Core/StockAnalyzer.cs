@@ -29,7 +29,7 @@ namespace RZLab.Clipper.Core
 
             var payload = new
             {
-                model = "gpt-4o-mini", // atau gpt-4o / gpt-4.1 / gpt-3.5-turbo
+                model = this.model, // atau gpt-4o / gpt-4.1 / gpt-3.5-turbo
                 messages = new[]
                 {
                     new { role = "system", content = "You are a stock analyst. Answer in valid JSON only." },

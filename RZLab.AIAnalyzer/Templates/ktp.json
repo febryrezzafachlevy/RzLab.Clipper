@@ -1,0 +1,18 @@
+{
+  "nik": "",
+  "nama": "",
+  "tempat_tanggal_lahir": "",
+  "jenis_kelamin": "",
+  "golongan_darah": "",
+  "alamat": {
+    "jalan": "",
+    "rt_rw": "",
+    "kelurahan": "",
+    "kecamatan": ""
+  },
+  "agama": "",
+  "status_perkawinan": "",
+  "pekerjaan": "",
+  "kewarganegaraan": "",
+  "berlaku_hingga": ""
+}
