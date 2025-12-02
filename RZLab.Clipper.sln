@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RZLab.Clipper.TestingChatBo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RZLab.AIAnalyzer", "RZLab.AIAnalyzer\RZLab.AIAnalyzer.csproj", "{9687D70A-51F3-42D3-B536-5A42062EE459}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RzLab.Clipper.ControlsLib", "RzLab.Clipper.ControlsLib\RzLab.Clipper.ControlsLib.csproj", "{5746C6F1-3DDA-48C3-A99F-738C92F4168C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9687D70A-51F3-42D3-B536-5A42062EE459}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9687D70A-51F3-42D3-B536-5A42062EE459}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9687D70A-51F3-42D3-B536-5A42062EE459}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5746C6F1-3DDA-48C3-A99F-738C92F4168C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5746C6F1-3DDA-48C3-A99F-738C92F4168C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5746C6F1-3DDA-48C3-A99F-738C92F4168C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5746C6F1-3DDA-48C3-A99F-738C92F4168C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -63,7 +63,7 @@
             panel1 = new Panel();
             panel2 = new Panel();
             btnClose = new PictureBox();
-            lstView = new RZLab.AIAnalyzer.Helpers.RzListView();
+            lstView = new RzLab.Clipper.ControlsLib.RzListView();
             pnlBrowseFile.SuspendLayout();
             pnlContainer.SuspendLayout();
             pnlBody.SuspendLayout();
@@ -565,6 +565,6 @@
         private RadioButton rbImageOptionSIM;
         private RadioButton rbImageOptionKTP;
         private Label label2;
-        private Helpers.RzListView lstView;
+        private RzLab.Clipper.ControlsLib.RzListView lstView;
     }
 }

@@ -33,7 +33,7 @@
             panel1 = new Panel();
             panel2 = new Panel();
             pnlGrid = new Panel();
-            lstView = new RZLab.AIAnalyzer.Helpers.RzListView();
+            lstView = new RzLab.Clipper.ControlsLib.RzListView();
             label4 = new Label();
             panel6 = new Panel();
             panel4 = new Panel();
@@ -443,6 +443,6 @@
         private Button btnProcess;
         private Button btnPackagePath;
         public TextBox txtJsonFilePath;
-        private Helpers.RzListView lstView;
+        private RzLab.Clipper.ControlsLib.RzListView lstView;
     }
 }

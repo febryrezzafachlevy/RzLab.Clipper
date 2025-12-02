@@ -10,13 +10,9 @@ public class DocumentCard : Panel
     private Panel contentPanel;
     private Panel buttonPanel;
 
-    private Label lblStatus;
-
-    private Button btnAnalyze;
     private Button btnView;
     private Button btnDelete;
 
-    public event EventHandler AnalyzeClicked;
     public event EventHandler ViewClicked;
     public event EventHandler DeleteClicked;
 
@@ -24,11 +20,12 @@ public class DocumentCard : Panel
     {
         Data = data;
 
+        Height = 190;
         Padding = new Padding(10, 15, 10, 5);
         BackColor = Color.FromArgb(55, 55, 55);
-        AutoSize = true;
-        AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        MinimumSize = new Size(660, 190);
+        //AutoSize = true;
+        //AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        //MinimumSize = new Size(500, 190);
 
         // Rounded corner
         this.Resize += (s, e) =>
@@ -38,28 +35,6 @@ public class DocumentCard : Panel
             );
         };
 
-        lblStatus = new Label()
-        {
-            AutoSize = true,
-            Font = new Font("Segoe UI", 9, FontStyle.Bold),
-            ForeColor = Color.White,
-            BackColor = Color.FromArgb(70, 70, 70),
-            Padding = new Padding(6, 2, 6, 2),
-            Location = new Point(this.Width - 100, 10),
-            Anchor = AnchorStyles.Top | AnchorStyles.Right
-        };
-
-        Controls.Add(lblStatus);
-        if (data.analysis_result != null)
-        {
-            lblStatus.Text = "ANALYZED";
-            lblStatus.BackColor = Color.FromArgb(0, 140, 60); // hijau
-        }
-        else
-        {
-            lblStatus.Text = "NOT ANALYZED";
-            lblStatus.BackColor = Color.FromArgb(180, 90, 0); // oranye
-        }
         // ============================================================
         // CONTENT PANEL (TOP)
         // ============================================================
@@ -119,23 +94,23 @@ public class DocumentCard : Panel
         btnDelete.FlatAppearance.BorderSize = 0;
         btnDelete.Click += (s, e) => DeleteClicked?.Invoke(this, e);
 
-        btnAnalyze = new Button()
-        {
-            Text = "Analyze",
-            Width = 80,
-            Height = 30,
-            BackColor = Color.FromArgb(70, 70, 120),
-            ForeColor = Color.White,
-            FlatStyle = FlatStyle.Flat
-        };
+        //btnAnalyze = new Button()
+        //{
+        //    Text = "Analyze",
+        //    Width = 80,
+        //    Height = 30,
+        //    BackColor = Color.FromArgb(70, 70, 120),
+        //    ForeColor = Color.White,
+        //    FlatStyle = FlatStyle.Flat
+        //};
 
-        btnAnalyze.FlatAppearance.BorderSize = 0;
-        btnAnalyze.Click += (s, e) => AnalyzeClicked?.Invoke(this, e);
+        //btnAnalyze.FlatAppearance.BorderSize = 0;
+        //btnAnalyze.Click += (s, e) => AnalyzeClicked?.Invoke(this, e);
 
         // Tambahkan ke bottom panel
+        //buttonPanel.Controls.Add(btnAnalyze);
         buttonPanel.Controls.Add(btnView);
         buttonPanel.Controls.Add(btnDelete);
-        buttonPanel.Controls.Add(btnAnalyze);
 
         // posisi default
         PositionButtons();
@@ -152,7 +127,6 @@ public class DocumentCard : Panel
     {
         btnDelete.Location = new Point(buttonPanel.Width - btnDelete.Width - 10, 8);
         btnView.Location = new Point(btnDelete.Left - btnView.Width - 8, 8);
-        btnAnalyze.Location = new Point(btnView.Left - btnAnalyze.Width - 8, 8);
     }
 
     private void AddLabel(Panel panel, string text, ref int y, int size = 10, FontStyle style = FontStyle.Regular)

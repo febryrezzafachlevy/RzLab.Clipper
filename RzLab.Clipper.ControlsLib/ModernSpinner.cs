@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.ComponentModel;
 using Timer = System.Windows.Forms.Timer;
 
+namespace RzLab.Clipper.ControlsLib;
 public class ModernSpinner : Control
 {
     private Timer timer;

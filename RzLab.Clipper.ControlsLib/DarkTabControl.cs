@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
 
-namespace RZLab.AIAnalyzer.Helpers;
+namespace RzLab.Clipper.ControlsLib;
 
 [ToolboxItem(true)]
 [DesignerCategory("Code")]

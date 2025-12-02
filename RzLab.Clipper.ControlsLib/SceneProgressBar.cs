@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
 
-namespace VideoAnalyzer.Controls
+namespace RzLab.Clipper.ControlsLib
 {
     public class SceneVideoProgressBar : Control
     {

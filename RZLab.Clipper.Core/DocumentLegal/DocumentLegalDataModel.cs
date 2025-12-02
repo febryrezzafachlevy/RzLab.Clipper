@@ -52,11 +52,26 @@ namespace RZLab.Clipper.Core.DocumentLegal
         public string title { get; set; }
         public string content { get; set; }
         public string risk { get; set; }
+        // optional page reference
+        public int page { get; set; }
     }
 
     public class PDFMetadata
     {
         public string text_raw { get; set; }
         public int page_count { get; set; }
+    }
+    public class CandidateClause
+    {
+        public int PageNumber { get; set; }         // 1-based
+        public string Snippet { get; set; }
+        public List<string> MatchedKeywords { get; set; } = new List<string>();
+        public double Score => MatchedKeywords.Count; // simple score
+    }
+    public class ClauseBlockModel
+    {
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public int PageNumber { get; set; }
     }
 }

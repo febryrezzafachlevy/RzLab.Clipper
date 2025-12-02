@@ -1,4 +1,5 @@
-﻿using RZLab.AIAnalyzer.Helpers;
+﻿using RzLab.Clipper.ControlsLib;
+using RZLab.AIAnalyzer.Helpers;
 using RZLab.Clipper.Core;
 using RZLab.Clipper.Core.DocumentLegal;
 using System;
@@ -137,7 +138,7 @@ namespace RZLab.AIAnalyzer
                 analysis_result = new AnalysisResultModel()
             };
 
-            _storageService.Append(doc);
+            _storageService.Save(doc);
 
             LoadDataGrid();
         }
@@ -145,10 +146,7 @@ namespace RZLab.AIAnalyzer
         void LoadDataGrid()
         {
             var data = _storageService.LoadAll();
-            DocumentLegalAnalyzerGridHelper.LoadData(flowCards, data, _appSetting,
-                (s, e) => ViewDetail(s),
-                (s, e) => AnalyzeAsync(s)
-            );
+            DocumentLegalAnalyzerGridHelper.LoadData(flowCards, data, _appSetting, (s, e) => ViewDetail(s));
 
             flowCards.Controls.Add(new Panel { Height = 20 });
         }
@@ -159,27 +157,10 @@ namespace RZLab.AIAnalyzer
             var model = sender as DocumentDataModel;
             if (model == null) return;
 
-            var detail = new FrmDocumentLegalDetail(model);
+            var detail = new FrmDocumentLegalDetail(model, _appSetting);
             detail.ShowDialog();
         }
-        async void AnalyzeAsync(object? sender)
-        {
-            if (sender == null) return;
-
-            var model = sender as DocumentDataModel;
-            if (model == null) return;
-
-            var analyzer = new DocumentLegalAnalyzer(_appSetting.OpenAI.ApiKey, _appSetting.OpenAI.Model);
-
-            var output = await analyzer.Analyze(model!.raw_text);
-
-            var analysis = JsonSerializer.Deserialize<AnalysisResultModel>(output.summary,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-            _storageService.SaveAnalysis(model.document_id, analysis!);
-
-            LoadDataGrid();
-        }
+        
         private void btnClose_Click(object sender, EventArgs e)
         {
             Environment.Exit(0);

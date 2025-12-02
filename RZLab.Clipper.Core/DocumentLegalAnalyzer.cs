@@ -28,9 +28,54 @@ namespace RZLab.Clipper.Core
                 new AuthenticationHeaderValue("Bearer", apiKey);
         }
 
-        public async Task<AnalysisResultModel> Analyze(string text)
+        /// <summary>
+        /// Sends a prompt to OpenAI Chat Completions endpoint using response_format json_object
+        /// Returns the JSON string in the "content" field (assumes model returns JSON).
+        /// </summary>
+        public async Task<string> AnalyzeAsync(string model, string prompt)
         {
             var url = "https://api.openai.com/v1/chat/completions";
+
+            var body = new
+            {
+                model = model,
+                response_format = new { type = "json_object" },
+                messages = new[]
+                {
+                    new { role = "user", content = prompt }
+                }
+            };
+
+            var json = JsonSerializer.Serialize(body);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var res = await http.PostAsync(url, content);
+            var text = await res.Content.ReadAsStringAsync();
+
+            if (!res.IsSuccessStatusCode)
+            {
+                throw new Exception($"OpenAI error {res.StatusCode}: {text}");
+            }
+
+            using var doc = JsonDocument.Parse(text);
+            // navigate: choices[0].message.content (string)
+            var contentStr = doc.RootElement
+                .GetProperty("choices")[0]
+                .GetProperty("message")
+                .GetProperty("content")
+                .GetString();
+
+            return contentStr;
+        }
+
+        /// <summary>
+        /// Sends a prompt to OpenAI Chat Completions endpoint using response_format json_object
+        /// Returns the JSON string in the "content" field (assumes model returns JSON).
+        /// </summary>
+        public async Task<AnalysisResultModel> AnalyzeAsync(string text)
+        {
+            var url = "https://api.openai.com/v1/chat/completions";
+            var prompt = "Analisa risiko dokumen ini:\n" + text;
 
             var body = new
             {
@@ -65,7 +110,13 @@ namespace RZLab.Clipper.Core
                    .GetProperty("content")
                    .GetString();
 
-            return output;  // JSON string di dalam content
+            var result = JsonSerializer.Deserialize<AnalysisResultModel>(output,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                }
+            );
+            return result;  // JSON string di dalam content
         }
     }
 }

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LibVLCSharp.Shared;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using VideoAnalyzer.Controls;
 using RZLab.Clipper.Core;
 using System.Diagnostics;
+using RzLab.Clipper.ControlsLib;
 
 
 namespace RZLab.AIAnalyzer

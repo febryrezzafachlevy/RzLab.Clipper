@@ -5,7 +5,7 @@ using System.Drawing.Drawing2D;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace RZLab.AIAnalyzer.Helpers;
+namespace RzLab.Clipper.ControlsLib;
 
 [ToolboxItem(true)]
 [DesignerCategory("Code")]

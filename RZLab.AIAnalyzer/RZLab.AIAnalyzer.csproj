@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RzLab.Clipper.ControlsLib\RzLab.Clipper.ControlsLib.csproj" />
     <ProjectReference Include="..\RZLab.Clipper.Core\RZLab.Clipper.Core.csproj" />
   </ItemGroup>
 
