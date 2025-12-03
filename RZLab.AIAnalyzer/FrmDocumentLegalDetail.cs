@@ -71,7 +71,7 @@ namespace RZLab.AIAnalyzer
         }
         void Initialize()
         {
-            if (_documentData.analysis_result.summary != null)
+            if (_documentData.analysis_result != null)
             {
                 btnAnalyze.Text = "Re-Analyze";
                 lblStatus.Text = "ANALYZED";
@@ -129,7 +129,7 @@ namespace RZLab.AIAnalyzer
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 _storageService.SaveAnalysis(model.document_id, analysis!);
-                _documentData = _storageService.Get(model.document_id);
+                _documentData.analysis_result = analysis!;
                 //Console.WriteLine("Analysis summary:");
                 //Console.WriteLine(analysis.summary);
                 //Console.WriteLine("Risks:");
@@ -181,18 +181,7 @@ namespace RZLab.AIAnalyzer
         void PreviewAISummary()
         {
             ShowLoader(true);
-            var analysisResultViewerModel = new AnalysisResultViewerModel();
-            analysisResultViewerModel.risks = _documentData.analysis_result.risks;
-            analysisResultViewerModel.summary = _documentData.analysis_result.summary;
-            analysisResultViewerModel.risk_level = _documentData.analysis_result.risk_level;
-            analysisResultViewerModel.recommendations = _documentData.analysis_result.recommendations;
-            analysisResultViewerModel.clauses = _documentData.analysis_result.clauses.Select(x => new ClauseViewerModel
-            {
-                title = x.title,
-                content = x.content,
-                risk = x.risk,
-            }).ToList();
-            _aiSummaryViewer.SetAnalysis(analysisResultViewerModel);
+            _aiSummaryViewer.SetAnalysis(_documentData.analysis_result);
             ShowLoader(false);
         }
     }

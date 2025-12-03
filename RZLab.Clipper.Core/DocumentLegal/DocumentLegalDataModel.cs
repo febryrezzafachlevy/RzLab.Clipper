@@ -35,14 +35,14 @@ namespace RZLab.Clipper.Core.DocumentLegal
     public class AnalysisResultModel
     {
         public string risk_level { get; set; }
-        public List<string> risks { get; set; }
+        public List<RiskModel> risks { get; set; }
         public List<ClauseModel> clauses { get; set; }
         public List<string> recommendations { get; set; }
         public string summary { get; set; }
 
         public AnalysisResultModel()
         {
-            risks = new List<string>();
+            risks = new List<RiskModel>();
             clauses = new List<ClauseModel>();
             recommendations = new List<string>();
         }
@@ -55,7 +55,13 @@ namespace RZLab.Clipper.Core.DocumentLegal
         // optional page reference
         public int page { get; set; }
     }
-
+    public class RiskModel
+    {
+        public string level { get; set; }        // "high", "medium", "low"
+        public string description { get; set; }  // penjelasan risiko
+        public int? page { get; set; }           // optional: lokasi risiko di dokumen
+        public string clause_title { get; set; } // optional: title pasal terkait
+    }
     public class PDFMetadata
     {
         public string text_raw { get; set; }

@@ -1,272 +1,320 @@
-﻿using System;
+﻿using RZLab.Clipper.Core.DocumentLegal;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace RzLab.Clipper.ControlsLib
+namespace RzLab.Clipper.ControlsLib;
+
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+
+public class AnalysisViewerControl : UserControl
 {
-    // Event args ketika clause dipilih — berikan page dan snippet
-    public class ClauseSelectedEventArgs : EventArgs
+    private TabControl tab;
+    private TabPage tabSummary, tabRisks, tabClauses, tabRecom;
+
+    private AISummaryPanel summaryPanel;
+    private FlowLayoutPanel panelRisks;
+    private FlowLayoutPanel panelClauses;
+    private FlowLayoutPanel panelRecom;
+
+    public event EventHandler<int> PdfJumpRequested;
+
+    public AnalysisViewerControl()
     {
-        public int PageNumber { get; }
-        public string Snippet { get; }
-        public ClauseSelectedEventArgs(int page, string snippet)
+        this.Dock = DockStyle.Fill;
+        this.BackColor = Color.FromArgb(32, 32, 32);
+
+        InitTabs();
+        InitSummaryTab();
+        InitRisksTab();
+        InitClausesTab();
+        InitRecommendationsTab();
+    }
+
+    //===========================================================
+    // INITIALIZATION
+    //===========================================================
+
+    private void InitTabs()
+    {
+        tab = new TabControl()
         {
-            PageNumber = page;
-            Snippet = snippet;
+            Dock = DockStyle.Fill,
+            Font = new Font("Segoe UI", 10, FontStyle.Regular),
+            Padding = new Point(10, 5)
+        };
+
+        tabSummary = new TabPage("Summary") { BackColor = Color.FromArgb(32, 32, 32) };
+        tabRisks = new TabPage("Risks") { BackColor = Color.FromArgb(32, 32, 32) };
+        tabClauses = new TabPage("Clauses") { BackColor = Color.FromArgb(32, 32, 32) };
+        tabRecom = new TabPage("Recommendations") { BackColor = Color.FromArgb(32, 32, 32) };
+
+        tab.Controls.AddRange(new[] { tabSummary, tabRisks, tabClauses, tabRecom });
+        tab.SelectedIndexChanged += (s, e) =>
+        {
+            if (tab.SelectedTab == tabClauses)
+                ForceRedrawClauses();
+        };
+        this.Controls.Add(tab);
+    }
+
+    private void InitSummaryTab()
+    {
+        summaryPanel = new AISummaryPanel()
+        {
+            Dock = DockStyle.Fill,
+        };
+        tabSummary.Controls.Add(summaryPanel);
+    }
+
+    private void InitRisksTab()
+    {
+        panelRisks = new FlowLayoutPanel()
+        {
+            Dock = DockStyle.Fill,
+            AutoScroll = true,
+            FlowDirection = FlowDirection.TopDown,
+            WrapContents = false,
+            Padding = new Padding(10),
+            BackColor = Color.FromArgb(32, 32, 32)
+        };
+
+        tabRisks.Controls.Add(panelRisks);
+    }
+
+    private void InitClausesTab()
+    {
+        panelClauses = new FlowLayoutPanel()
+        {
+            Dock = DockStyle.Fill,
+            AutoScroll = true,
+            FlowDirection = FlowDirection.TopDown,
+            WrapContents = false,
+            Padding = new Padding(10),
+            BackColor = Color.FromArgb(32, 32, 32)
+        };
+
+        tabClauses.Controls.Add(panelClauses);
+    }
+
+    private void InitRecommendationsTab()
+    {
+        panelRecom = new FlowLayoutPanel()
+        {
+            Dock = DockStyle.Fill,
+            AutoScroll = true,
+            FlowDirection = FlowDirection.TopDown,
+            WrapContents = false,
+            Padding = new Padding(10),
+            BackColor = Color.FromArgb(32, 32, 32)
+        };
+
+        tabRecom.Controls.Add(panelRecom);
+    }
+
+    //===========================================================
+    // SETTER UTAMA
+    //===========================================================
+
+    public void SetAnalysis(AnalysisResultModel model)
+    {
+        if (model == null)
+        {
+            summaryPanel.SetSummary(null);
+            panelRisks.Controls.Clear();
+            panelClauses.Controls.Clear();
+            panelRecom.Controls.Clear();
+            return;
+        }
+
+        summaryPanel.SetSummary(model);
+        SetRisks(model.risks);
+        SetClauses(model.clauses);
+        SetRecommendations(model.recommendations);
+    }
+
+    //===========================================================
+    // SUMMARY
+    //===========================================================
+
+    public void SetSummary(AnalysisResultModel model)
+    {
+        summaryPanel.SetSummary(model);
+    }
+
+    //===========================================================
+    // RISKS
+    //===========================================================
+
+    public void SetRisks(List<RiskModel> risks)
+    {
+        panelRisks.Controls.Clear();
+
+        if (risks == null || risks.Count == 0)
+        {
+            panelRisks.Controls.Add(NoText("No risks detected."));
+            return;
+        }
+
+        foreach (var risk in risks)
+        {
+            var card = BuildRiskCard(risk);
+            panelRisks.Controls.Add(card);
         }
     }
 
-    public partial class AnalysisViewerControl : UserControl
+    private Control BuildRiskCard(RiskModel risk)
     {
-        // Models expected: AnalysisResultModel, ClauseModel (same names as previously)
-        private TabControl tab;
-        private RichTextBox txtSummary;
-        private ListView lvRisks;
-        private FlowLayoutPanel flowClauses;
-        private ListBox lbRecommendations;
-
-        public event EventHandler<ClauseSelectedEventArgs> ClauseSelected;
-
-        public AnalysisViewerControl()
+        var panel = new Panel()
         {
-            InitializeComponent();
-            BuildUi();
+            Width = panelRisks.Width - 35,
+            Height = 90,
+            Margin = new Padding(5),
+            BackColor = Color.FromArgb(45, 45, 45),
+            Padding = new Padding(10)
+        };
+
+        string level = (risk.level ?? "medium").ToUpper();
+
+        Color c = level switch
+        {
+            "HIGH" => Color.FromArgb(180, 40, 40),
+            "MEDIUM" => Color.FromArgb(230, 140, 10),
+            "LOW" => Color.FromArgb(40, 150, 60),
+            _ => Color.Gray
+        };
+
+        var lbl = new Label()
+        {
+            Text = $"[{level}]  {risk.description}",
+            AutoSize = false,
+            Width = panel.Width - 20,
+            Height = 60,
+            ForeColor = Color.WhiteSmoke,
+            Font = new Font("Segoe UI", 10),
+        };
+
+        var badge = new Label()
+        {
+            AutoSize = true,
+            BackColor = c,
+            ForeColor = Color.White,
+            Font = new Font("Segoe UI", 9, FontStyle.Bold),
+            Padding = new Padding(6, 2, 6, 2),
+            Text = level
+        };
+
+        badge.Location = new Point(panel.Width - badge.Width - 20, 10);
+        lbl.Location = new Point(10, 35);
+
+        panel.Controls.Add(badge);
+        panel.Controls.Add(lbl);
+
+        return panel;
+    }
+
+    //===========================================================
+    // CLAUSES
+    //===========================================================
+
+    public void SetClauses(List<ClauseModel> clauses)
+    {
+        panelClauses.Controls.Clear();
+
+        if (clauses == null || clauses.Count == 0)
+        {
+            panelClauses.Controls.Add(NoText("No clauses found."));
+            return;
         }
 
-        private void InitializeComponent()
+        foreach (var c in clauses)
         {
-            this.SuspendLayout();
-            this.Name = "AnalysisViewerControl";
-            this.Size = new Size(560, 720);
-            this.ResumeLayout(false);
+            var card = new ClauseCardControl();
+            card.Width = panelClauses.Width - 40; 
+            //card.Width = 500;
+            //card.Height = 200;
+            //card.BackColor = Color.Red; // DEBUG
+            //card.BorderStyle = BorderStyle.FixedSingle; // DEBUG
+            //card.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+
+            card.SetClause(c);
+
+            card.JumpRequested += (s, page) =>
+            {
+                PdfJumpRequested?.Invoke(this, page);
+            };
+
+
+            panelClauses.Controls.Add(card);
         }
 
-        private void BuildUi()
+        // Fix layout immediately
+        ForceRedrawClauses();
+    }
+
+    //===========================================================
+    // RECOMMENDATIONS
+    //===========================================================
+
+    public void SetRecommendations(List<string> recom)
+    {
+        panelRecom.Controls.Clear();
+
+        if (recom == null || recom.Count == 0)
         {
-            // Tab control
-            tab = new TabControl { Dock = DockStyle.Fill };
-            tab.TabPages.Add("Summary");
-            tab.TabPages.Add("Risks");
-            tab.TabPages.Add("Clauses");
-            tab.TabPages.Add("Recommendations");
-
-            // Summary tab
-            txtSummary = new RichTextBox
-            {
-                ReadOnly = true,
-                Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(30, 30, 30),
-                ForeColor = Color.White,
-                BorderStyle = BorderStyle.None
-            };
-            tab.TabPages[0].Controls.Add(txtSummary);
-
-            // Risks tab
-            lvRisks = new ListView
-            {
-                Dock = DockStyle.Fill,
-                View = View.Details,
-                BackColor = Color.FromArgb(30, 30, 30),
-                ForeColor = Color.White,
-                FullRowSelect = true,
-                HeaderStyle = ColumnHeaderStyle.Nonclickable
-            };
-            lvRisks.Columns.Add("Risk", -2);
-            lvRisks.Columns.Add("Severity", 80);
-            tab.TabPages[1].Controls.Add(lvRisks);
-
-            // Clauses tab (flow panel)
-            flowClauses = new FlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                AutoScroll = true,
-                FlowDirection = FlowDirection.TopDown,
-                WrapContents = false,
-                Padding = new Padding(6),
-                BackColor = Color.FromArgb(25, 25, 25)
-            };
-            tab.TabPages[2].Controls.Add(flowClauses);
-
-            // Recommendations
-            lbRecommendations = new ListBox
-            {
-                Dock = DockStyle.Fill,
-                BackColor = Color.FromArgb(30, 30, 30),
-                ForeColor = Color.White
-            };
-            tab.TabPages[3].Controls.Add(lbRecommendations);
-
-            this.Controls.Add(tab);
+            panelRecom.Controls.Add(NoText("No recommendations."));
+            return;
         }
 
-        /// <summary>
-        /// Set AnalysisResultModel to viewer. Clears previous.
-        /// </summary>
-        public void SetAnalysis(AnalysisResultViewerModel analysis)
+        foreach (var r in recom)
         {
-            txtSummary.Clear();
-            lvRisks.Items.Clear();
-            flowClauses.Controls.Clear();
-            lbRecommendations.Items.Clear();
-
-            if (analysis == null) return;
-
-            // Summary
-            txtSummary.Text = analysis.summary ?? "";
-
-            // Risks
-            if (analysis.risks != null)
+            var lbl = new Label()
             {
-                foreach (var r in analysis.risks)
-                {
-                    var item = new ListViewItem(new[] { r, "" });
-                    // try to detect severity word inside the string like "(High)" or use risk_level
-                    lvRisks.Items.Add(item);
-                }
-                // auto resize columns
-                lvRisks.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
-            }
-
-            // Clauses: create small ClauseCard per clause
-            if (analysis.clauses != null)
-            {
-                foreach (var c in analysis.clauses)
-                {
-                    var card = MakeClauseCard(c);
-                    flowClauses.Controls.Add(card);
-                }
-            }
-
-            // Recommendations
-            if (analysis.recommendations != null)
-            {
-                foreach (var rec in analysis.recommendations)
-                    lbRecommendations.Items.Add("• " + rec);
-            }
-        }
-
-        // small internal clause card
-        private Control MakeClauseCard(ClauseViewerModel c)
-        {
-            var pnl = new Panel
-            {
-                Width = flowClauses.ClientSize.Width - 30,
-                Height = 120,
-                BackColor = Color.FromArgb(40, 40, 40),
-                Margin = new Padding(6),
-                BorderStyle = BorderStyle.None,
-            };
-
-            pnl.Resize += (s, e) => { pnl.Width = flowClauses.ClientSize.Width - 30; };
-
-            var title = new Label
-            {
-                Text = string.IsNullOrWhiteSpace(c.title) ? "Clause" : c.title,
-                Font = new Font("Segoe UI", 9, FontStyle.Bold),
-                ForeColor = Color.White,
-                Location = new Point(8, 8),
-                AutoSize = true
-            };
-            pnl.Controls.Add(title);
-
-            var badge = new Label
-            {
-                Text = (c.risk ?? "").ToUpper(),
-                BackColor = GetRiskColor(c.risk),
-                ForeColor = Color.White,
                 AutoSize = true,
-                Padding = new Padding(6, 2, 6, 2),
-                Location = new Point(pnl.Width - 80, 8),
-                Anchor = AnchorStyles.Top | AnchorStyles.Right
+                MaximumSize = new Size(panelRecom.Width - 30, 0),
+                ForeColor = Color.Gainsboro,
+                Font = new Font("Segoe UI", 10),
+                Padding = new Padding(8),
+                Text = "• " + r
             };
-            pnl.Controls.Add(badge);
-            badge.BringToFront();
+            lbl.BackColor = Color.FromArgb(50, 50, 50);
 
-            var snippet = new TextBox
-            {
-                Multiline = true,
-                ReadOnly = true,
-                BorderStyle = BorderStyle.None,
-                BackColor = Color.FromArgb(40, 40, 40),
-                ForeColor = Color.FromArgb(230, 230, 230),
-                Location = new Point(8, 34),
-                Size = new Size(pnl.Width - 16, 60),
-                Text = c.content ?? ""
-            };
-            snippet.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            pnl.Controls.Add(snippet);
-
-            // Actions panel (jump, details)
-            var btnJump = new Button
-            {
-                Text = "Jump to PDF",
-                Width = 90,
-                Height = 26,
-                BackColor = Color.FromArgb(70, 70, 120),
-                ForeColor = Color.White,
-                FlatStyle = FlatStyle.Flat,
-                Location = new Point(pnl.Width - 100, pnl.Height - 36),
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Right
-            };
-            btnJump.FlatAppearance.BorderSize = 0;
-            pnl.Controls.Add(btnJump);
-
-            btnJump.Click += (s, e) =>
-            {
-                // ClauseModel may not contain page reference; if it has, caller should map via AnnotationMapper
-                // We raise event with page number if available in title or content as convention.
-                int page = 0;
-                // try to parse pattern "Page: N" from content (if present)
-                // If your analysis_result has pageNumber, modify ClauseModel to include it and use it here.
-                ClauseSelected?.Invoke(this, new ClauseSelectedEventArgs(page, c.content ?? ""));
-            };
-
-            // whole panel click also raises selected
-            pnl.Click += (s, e) => ClauseSelected?.Invoke(this, new ClauseSelectedEventArgs(0, c.content ?? ""));
-            snippet.Click += (s, e) => ClauseSelected?.Invoke(this, new ClauseSelectedEventArgs(0, c.content ?? ""));
-            title.Click += (s, e) => ClauseSelected?.Invoke(this, new ClauseSelectedEventArgs(0, c.content ?? ""));
-
-            return pnl;
-        }
-
-        private Color GetRiskColor(string risk)
-        {
-            if (string.IsNullOrEmpty(risk)) return Color.Gray;
-            var r = risk.ToLower();
-            if (r.Contains("high")) return Color.FromArgb(200, 40, 40);
-            if (r.Contains("medium")) return Color.FromArgb(230, 130, 20);
-            if (r.Contains("low")) return Color.FromArgb(60, 160, 60);
-            return Color.FromArgb(120, 120, 120);
-        }
-
-        /// <summary>
-        /// Optional: clears the viewer
-        /// </summary>
-        public void Clear()
-        {
-            txtSummary.Clear();
-            lvRisks.Items.Clear();
-            flowClauses.Controls.Clear();
-            lbRecommendations.Items.Clear();
+            panelRecom.Controls.Add(lbl);
         }
     }
 
-    // Minimal models (if not in your Models folder, remove this block and reference your models)
-    public class AnalysisResultViewerModel
-    {
-        public string risk_level { get; set; }
-        public List<string> risks { get; set; }
-        public List<ClauseViewerModel> clauses { get; set; }
-        public List<string> recommendations { get; set; }
-        public string summary { get; set; }
-    }
+    //===========================================================
+    // UTIL
+    //===========================================================
 
-    public class ClauseViewerModel
+    private Label NoText(string text)
     {
-        public string title { get; set; }
-        public string content { get; set; }
-        public string risk { get; set; }
+        return new Label()
+        {
+            Text = text,
+            AutoSize = true,
+            Padding = new Padding(10),
+            ForeColor = Color.Gray,
+            Font = new Font("Segoe UI", 10)
+        };
+    }
+    private void ForceRedrawClauses()
+    {
+        if (panelClauses.Controls.Count == 0)
+            return;
+
+        foreach (Control ctrl in panelClauses.Controls)
+        {
+            ctrl.Width = panelClauses.ClientSize.Width - 40;
+        }
+
+        panelClauses.PerformLayout();
+        panelClauses.Invalidate();
+        panelClauses.Refresh();
     }
 }

@@ -28,24 +28,54 @@ namespace RZLab.Clipper.Core.DocumentLegal
 
         public static string BuildFinalAnalysisPrompt(string combinedSummaries, string fileName)
         {
-            // instruct model to return AnalysisResultModel JSON
-            var instruction = @$"
-            You are a legal AI assistant. Analyze the following condensed clause summaries from document: {fileName}.
-            Return a valid JSON object with this exact schema:
+            return @$"
+            You are an advanced legal analysis AI.
+
+            Your task is to analyze the contract summaries below and generate a structured JSON output.
+            You MUST respond with a VALID JSON OBJECT only.
+
+            Return EXACT JSON with the following schema:
+
             {{
-              ""risk_level"": ""low|medium|high"",
-              ""risks"": [""...""],
-              ""clauses"": [ {{ ""title"": ""Pasal X"", ""content"": ""..."", ""risk"": ""low|medium|high"", ""page"": 1 }} ],
-              ""recommendations"": [""...""],
-              ""summary"": ""short summary (1-3 sentences)""
+              ""risk_level"": ""low | medium | high"",
+              ""risks"": [
+                {{
+                  ""level"": ""low | medium | high"",
+                  ""description"": ""short explanation of the risk"",
+                  ""page"": 0,
+                  ""clause_title"": """"
+                }}
+              ],
+              ""clauses"": [
+                {{
+                  ""title"": ""name of clause or pasal"",
+                  ""content"": ""cleaned text of the clause"",
+                  ""risk"": ""low | medium | high"",
+                  ""page"": 0
+                }}
+              ],
+              ""recommendations"": [
+                ""short actionable recommendations""
+              ],
+              ""summary"": ""1–3 sentence human-readable summary of the document""
             }}
-            Respond *only* with the JSON object. No explanation.
-            ----
-            CONTENT:
+
+            VERY IMPORTANT RULES:
+            1. ALWAYS return valid JSON.
+            2. NEVER include commentary, explanation, or natural language outside the JSON.
+            3. If page number cannot be inferred, set ""page"": 0.
+            4. If clause title is unknown, set ""clause_title"": """".
+            5. If clause risk cannot be determined, set ""risk"": ""medium"".
+            6. All text MUST be generated inside the JSON only.
+            7. The JSON must NOT be wrapped in code fences.
+            8. Use your best judgment to classify risk levels.
+            9. The document name is: {fileName}
+
+            CONTENT TO ANALYZE:
             {combinedSummaries}
             ";
-            return instruction;
         }
+
     }
 
     public class ContractAnalysisPipeline
@@ -148,37 +178,28 @@ namespace RZLab.Clipper.Core.DocumentLegal
             var finalPrompt = DocumentLegalPromptBuilder.BuildFinalAnalysisPrompt(combined, doc.file_name);
             var finalJson = await finalAnalyzer.AnalyzeAsync(finalModel, finalPrompt);
 
-            // 6. parse finalJson => AnalysisResultModel
-            AnalysisResultModel analysis;
             try
             {
-                analysis = JsonSerializer.Deserialize<AnalysisResultModel>(finalJson,
+                var analysis = JsonSerializer.Deserialize<AnalysisResultModel>(finalJson,
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                // attach page to clause items if possible (try to match snippet to summaries)
+                foreach (var clause in analysis.clauses)
+                {
+                    // try to find matching summary snippet for page mapping
+                    var match = summaries.FirstOrDefault(s => clause.content != null && s.summary != null && s.summary.Length > 10 && clause.content.Contains(s.summary.Substring(0, Math.Min(80, s.summary.Length))));
+                    if (match != default) clause.page = match.page;
+                }
+
+                // 7. save to JSON storage
+                storage.SaveAnalysis(doc.document_id, analysis);
+
+                return analysis;
             }
             catch (Exception ex)
             {
-                // fallback: create minimal analysis
-                analysis = new AnalysisResultModel
-                {
-                    summary = "Analysis failed to parse. See raw output.",
-                    risks = new List<string> { "Parsing error: " + ex.Message },
-                    recommendations = new List<string>(),
-                    clauses = new List<ClauseModel>()
-                };
+                throw new Exception("JSON parsing error: " + ex.Message);
             }
-
-            // attach page to clause items if possible (try to match snippet to summaries)
-            foreach (var clause in analysis.clauses)
-            {
-                // try to find matching summary snippet for page mapping
-                var match = summaries.FirstOrDefault(s => clause.content != null && s.summary != null && s.summary.Length > 10 && clause.content.Contains(s.summary.Substring(0, Math.Min(80, s.summary.Length))));
-                if (match != default) clause.page = match.page;
-            }
-
-            // 7. save to JSON storage
-            storage.SaveAnalysis(doc.document_id, analysis);
-
-            return analysis;
         }
 
         private static IEnumerable<List<T>> Chunk<T>(List<T> source, int chunkSize)

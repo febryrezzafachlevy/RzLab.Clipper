@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RZLab.Clipper.Core\RZLab.Clipper.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="ModernSpinner.cs">
       <SubType>Component</SubType>
     </Compile>

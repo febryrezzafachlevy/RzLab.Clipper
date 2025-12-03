@@ -24,7 +24,7 @@ public class DocumentLegalStorageService
         if (!File.Exists(dbPath))
             return new List<DocumentDataModel>();
 
-        string json = File.ReadAllText(dbPath);
+         string json = File.ReadAllText(dbPath);
 
         return JsonSerializer.Deserialize<List<DocumentDataModel>>(json,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
