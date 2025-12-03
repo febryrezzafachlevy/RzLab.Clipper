@@ -76,14 +76,54 @@ namespace RZLab.AIAnalyzer.Helpers
 
             foreach (var p in items)
             {
-                var card = new DocumentCard(p);
+                var card = new DocumentCardControl();
+                card.SetData(
+                    fileName: p.file_name,
+                    fileType: p.document_type,
+                    uploadedAt: p.uploaded_at,
+                    relevantFacts: p.metadata.page_count,
+                    Properties.Resources.pdf_96px
+                );
+                card.Width = flowCards.ClientSize.Width - 6;
 
                 // Full width sesuai FlowLayoutPanel
-                card.Width = 500;   // padding kiri-kanan
-                card.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-                card.Margin = new Padding(10);
+                //card.Width = flowCards.Width - 20;   // padding kiri-kanan
+                //card.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+                //card.Margin = new Padding(10);
 
-                card.ViewClicked += (s, e) => ViewClicked(p, e);
+                //card.ViewClicked += (s, e) => ViewClicked(p, e);
+
+                flowCards.Controls.Add(card);
+            }
+
+            flowCards.ResumeLayout();
+        }
+        public static void LoadData(FlowLayoutPanel flowCards, List<DocumentDataModel> items, AppSettingModel appSetting, Action<DocumentDataModel> OnViewDocument, Action<DocumentDataModel> OnDeleteDocument)
+        {
+            flowCards.SuspendLayout();
+            flowCards.Controls.Clear();
+
+            foreach (var p in items)
+            {
+                var card = new DocumentCardControl();
+                card.SetData(
+                    fileName: p.file_name,
+                    fileType: p.document_type,
+                    uploadedAt: p.uploaded_at,
+                    relevantFacts: p.metadata.page_count,
+                    Properties.Resources.pdf_96px
+                );
+                card.Width = flowCards.ClientSize.Width - 6;
+                card.MenuClicked += (s, e) =>
+                {
+                    ShowDocumentMenu(card, p, OnViewDocument, OnDeleteDocument);
+                };
+                // Full width sesuai FlowLayoutPanel
+                //card.Width = flowCards.Width - 20;   // padding kiri-kanan
+                //card.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+                //card.Margin = new Padding(10);
+
+                //card.ViewClicked += (s, e) => ViewClicked(p, e);
 
                 flowCards.Controls.Add(card);
             }
@@ -182,6 +222,35 @@ namespace RZLab.AIAnalyzer.Helpers
             {
                 item.ForeColor = Color.FromArgb(220, 53, 69);
             }
+        }
+        private static void ShowDocumentMenu(DocumentCardControl card, DocumentDataModel document, Action<DocumentDataModel> OnViewDocument, Action<DocumentDataModel> OnDeleteDocument)
+        {
+            ContextMenuStrip menu = new ContextMenuStrip();
+
+            menu.BackColor = Color.FromArgb(45, 45, 45);
+            menu.ForeColor = Color.White;
+            menu.ShowImageMargin = false;
+
+            var viewItem = new ToolStripMenuItem("View");
+            var deleteItem = new ToolStripMenuItem("Delete");
+
+            // EVENT: View
+            viewItem.Click += (s, e) =>
+            {
+                OnViewDocument(document);
+            };
+
+            // EVENT: Delete
+            deleteItem.Click += (s, e) =>
+            {
+                OnDeleteDocument(document);
+            };
+
+            menu.Items.Add(viewItem);
+            menu.Items.Add(deleteItem);
+
+            // Tampilkan menu tepat di bawah tombol ⋮
+            menu.Show(Cursor.Position);
         }
     }
 }

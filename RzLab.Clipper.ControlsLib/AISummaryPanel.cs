@@ -16,7 +16,7 @@ namespace RzLab.Clipper.ControlsLib
 
         public AISummaryPanel()
         {
-            this.BackColor = Color.FromArgb(28, 28, 28);
+            //this.BackColor = Color.FromArgb(28, 28, 28);
             this.Padding = new Padding(15, 15, 15, 15);
 
             // MAIN LAYOUT

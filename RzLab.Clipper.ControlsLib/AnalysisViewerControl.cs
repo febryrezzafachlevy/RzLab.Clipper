@@ -23,7 +23,7 @@ public class AnalysisViewerControl : UserControl
     private FlowLayoutPanel panelRecom;
 
     public event EventHandler<int> PdfJumpRequested;
-
+    
     public AnalysisViewerControl()
     {
         this.Dock = DockStyle.Fill;
@@ -168,6 +168,56 @@ public class AnalysisViewerControl : UserControl
         }
     }
 
+    public static Panel AddRiskCard(RiskModel risk, Panel panelRisks)
+    {
+        var panel = new Panel()
+        {
+            Width = panelRisks.Width - 35,
+            Height = 90,
+            Margin = new Padding(5),
+            BackColor = Color.FromArgb(45, 45, 45),
+            Padding = new Padding(10)
+        };
+
+        string level = (risk.level ?? "medium").ToUpper();
+
+        Color c = level switch
+        {
+            "HIGH" => Color.FromArgb(180, 40, 40),
+            "MEDIUM" => Color.FromArgb(230, 140, 10),
+            "LOW" => Color.FromArgb(40, 150, 60),
+            _ => Color.Gray
+        };
+
+        var lbl = new Label()
+        {
+            Text = $"[{level}]  {risk.description}",
+            AutoSize = false,
+            Width = panel.Width - 20,
+            Height = 60,
+            ForeColor = Color.WhiteSmoke,
+            Font = new Font("Segoe UI", 10),
+        };
+
+        var badge = new Label()
+        {
+            AutoSize = true,
+            BackColor = c,
+            ForeColor = Color.White,
+            Font = new Font("Segoe UI", 9, FontStyle.Bold),
+            Padding = new Padding(6, 2, 6, 2),
+            Text = level
+        };
+
+        badge.Location = new Point(panel.Width - badge.Width - 20, 10);
+        lbl.Location = new Point(10, 35);
+
+        panel.Controls.Add(badge);
+        panel.Controls.Add(lbl);
+
+        return panel;
+    }
+
     private Control BuildRiskCard(RiskModel risk)
     {
         var panel = new Panel()
@@ -221,6 +271,43 @@ public class AnalysisViewerControl : UserControl
     //===========================================================
     // CLAUSES
     //===========================================================
+
+    public static Panel AddClauses(List<ClauseModel> clauses, Panel panelClauses)
+    {
+        panelClauses.Controls.Clear();
+
+        if (clauses == null || clauses.Count == 0)
+        {
+            panelClauses.Controls.Add(NoText("No clauses found.", panelClauses));
+            return panelClauses;
+        }
+
+        foreach (var c in clauses)
+        {
+            var card = new ClauseCardControl();
+            card.Width = panelClauses.Width - 40;
+            //card.Width = 500;
+            //card.Height = 200;
+            //card.BackColor = Color.Red; // DEBUG
+            //card.BorderStyle = BorderStyle.FixedSingle; // DEBUG
+            //card.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top;
+
+            card.SetClause(c);
+
+            //card.JumpRequested += (s, page) =>
+            //{
+            //    PdfJumpRequested?.Invoke(this, page);
+            //};
+
+
+            panelClauses.Controls.Add(card);
+        }
+
+        // Fix layout immediately
+        ForceRedrawClauses(panelClauses);
+
+        return panelClauses;
+    }
 
     public void SetClauses(List<ClauseModel> clauses)
     {
@@ -291,7 +378,17 @@ public class AnalysisViewerControl : UserControl
     //===========================================================
     // UTIL
     //===========================================================
-
+    private static Label NoText(string text, Panel panel)
+    {
+        return new Label()
+        {
+            Text = text,
+            AutoSize = true,
+            Padding = new Padding(10),
+            ForeColor = Color.Gray,
+            Font = new Font("Segoe UI", 10)
+        };
+    }
     private Label NoText(string text)
     {
         return new Label()
@@ -304,6 +401,20 @@ public class AnalysisViewerControl : UserControl
         };
     }
     private void ForceRedrawClauses()
+    {
+        if (panelClauses.Controls.Count == 0)
+            return;
+
+        foreach (Control ctrl in panelClauses.Controls)
+        {
+            ctrl.Width = panelClauses.ClientSize.Width - 40;
+        }
+
+        panelClauses.PerformLayout();
+        panelClauses.Invalidate();
+        panelClauses.Refresh();
+    }
+    private static void ForceRedrawClauses(Panel panelClauses)
     {
         if (panelClauses.Controls.Count == 0)
             return;

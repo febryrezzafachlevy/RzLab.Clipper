@@ -12,6 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="DocumentCardControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="ModernSpinner.cs">
       <SubType>Component</SubType>
     </Compile>
