@@ -29,7 +29,7 @@ namespace RZLab.AIAnalyzer
         private readonly DocumentLegalStorageService _storageService;
         private readonly PdfExtractor _pdfExtractor;
         private readonly AnalysisViewerControl _aiSummaryViewer;
-        private AnalysisViewerNoTabsControl _analysisViewer;
+        private LegalDocumentAnalysisViewer _analysisViewer;
         public FrmLegalDocument()
         {
             InitializeComponent();
@@ -37,8 +37,7 @@ namespace RZLab.AIAnalyzer
             _storageService = new DocumentLegalStorageService();
             _pdfExtractor = new PdfExtractor();
             _aiSummaryViewer = new AnalysisViewerControl();
-            _analysisViewer = new AnalysisViewerNoTabsControl();
-            _analysisViewer.Dock = DockStyle.Fill;
+            _analysisViewer = new LegalDocumentAnalysisViewer();
 
             _aiSummaryViewer.Dock = DockStyle.Fill;
             //tabPage2.Controls.Clear();
@@ -199,9 +198,10 @@ namespace RZLab.AIAnalyzer
             //_analysisViewer.SetAnalysis(model);
             //pnlAISummary.Controls.Add(_analysisViewer);
             //_analysisViewer.BringToFront();
+            _analysisViewer.Dock = DockStyle.Fill;
             pnlAISummary.Controls.Clear();
-            _analysisViewer.SetAnalysis(model);
             pnlAISummary.Controls.Add(_analysisViewer);
+            _analysisViewer.SetAnalysis(model);
 
         }
         //async void PreviewDocument()

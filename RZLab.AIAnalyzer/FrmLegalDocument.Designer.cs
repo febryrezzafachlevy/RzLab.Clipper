@@ -31,6 +31,7 @@
             pnlContainer = new Panel();
             pnlBody = new Panel();
             pnlRightSide = new Panel();
+            pnlAISummary = new Panel();
             panel6 = new Panel();
             panel5 = new Panel();
             pnlDocumentName = new Panel();
@@ -55,7 +56,6 @@
             panel1 = new Panel();
             panel2 = new Panel();
             btnClose = new PictureBox();
-            pnlAISummary = new Panel();
             pnlContainer.SuspendLayout();
             pnlBody.SuspendLayout();
             pnlRightSide.SuspendLayout();
@@ -78,7 +78,7 @@
             pnlContainer.Dock = DockStyle.Fill;
             pnlContainer.Location = new Point(5, 5);
             pnlContainer.Name = "pnlContainer";
-            pnlContainer.Size = new Size(1015, 645);
+            pnlContainer.Size = new Size(1124, 645);
             pnlContainer.TabIndex = 0;
             // 
             // pnlBody
@@ -89,7 +89,7 @@
             pnlBody.Location = new Point(0, 34);
             pnlBody.Name = "pnlBody";
             pnlBody.Padding = new Padding(5);
-            pnlBody.Size = new Size(1015, 611);
+            pnlBody.Size = new Size(1124, 611);
             pnlBody.TabIndex = 2;
             // 
             // pnlRightSide
@@ -101,8 +101,16 @@
             pnlRightSide.Location = new Point(411, 5);
             pnlRightSide.Name = "pnlRightSide";
             pnlRightSide.Padding = new Padding(10);
-            pnlRightSide.Size = new Size(599, 601);
+            pnlRightSide.Size = new Size(708, 601);
             pnlRightSide.TabIndex = 1;
+            // 
+            // pnlAISummary
+            // 
+            pnlAISummary.Dock = DockStyle.Fill;
+            pnlAISummary.Location = new Point(10, 53);
+            pnlAISummary.Name = "pnlAISummary";
+            pnlAISummary.Size = new Size(688, 538);
+            pnlAISummary.TabIndex = 13;
             // 
             // panel6
             // 
@@ -110,7 +118,7 @@
             panel6.Dock = DockStyle.Top;
             panel6.Location = new Point(10, 43);
             panel6.Name = "panel6";
-            panel6.Size = new Size(579, 10);
+            panel6.Size = new Size(688, 10);
             panel6.TabIndex = 12;
             // 
             // panel5
@@ -121,7 +129,7 @@
             panel5.Dock = DockStyle.Top;
             panel5.Location = new Point(10, 10);
             panel5.Name = "panel5";
-            panel5.Size = new Size(579, 33);
+            panel5.Size = new Size(688, 33);
             panel5.TabIndex = 8;
             // 
             // pnlDocumentName
@@ -164,7 +172,7 @@
             lblStatus.Dock = DockStyle.Right;
             lblStatus.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblStatus.ForeColor = Color.Black;
-            lblStatus.Location = new Point(429, 0);
+            lblStatus.Location = new Point(538, 0);
             lblStatus.Margin = new Padding(2, 0, 2, 0);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(148, 31);
@@ -317,7 +325,7 @@
             pnlHeader.Location = new Point(0, 0);
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Padding = new Padding(10, 0, 0, 0);
-            pnlHeader.Size = new Size(1015, 34);
+            pnlHeader.Size = new Size(1124, 34);
             pnlHeader.TabIndex = 1;
             // 
             // btnAnalyze
@@ -327,7 +335,7 @@
             btnAnalyze.FlatStyle = FlatStyle.Flat;
             btnAnalyze.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnAnalyze.ForeColor = Color.White;
-            btnAnalyze.Location = new Point(845, 7);
+            btnAnalyze.Location = new Point(952, 7);
             btnAnalyze.Margin = new Padding(2);
             btnAnalyze.Name = "btnAnalyze";
             btnAnalyze.Size = new Size(100, 22);
@@ -344,7 +352,7 @@
             btnRefresh.FlatStyle = FlatStyle.Flat;
             btnRefresh.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
             btnRefresh.ForeColor = Color.Black;
-            btnRefresh.Location = new Point(741, 7);
+            btnRefresh.Location = new Point(848, 7);
             btnRefresh.Margin = new Padding(2);
             btnRefresh.Name = "btnRefresh";
             btnRefresh.Size = new Size(100, 22);
@@ -370,7 +378,7 @@
             // 
             panel1.Controls.Add(panel2);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(964, 0);
+            panel1.Location = new Point(1073, 0);
             panel1.Name = "panel1";
             panel1.Size = new Size(51, 34);
             panel1.TabIndex = 1;
@@ -399,20 +407,12 @@
             btnClose.TabStop = false;
             btnClose.Click += btnClose_Click;
             // 
-            // pnlAISummary
-            // 
-            pnlAISummary.Dock = DockStyle.Fill;
-            pnlAISummary.Location = new Point(10, 53);
-            pnlAISummary.Name = "pnlAISummary";
-            pnlAISummary.Size = new Size(579, 538);
-            pnlAISummary.TabIndex = 13;
-            // 
             // FrmLegalDocument
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DimGray;
-            ClientSize = new Size(1025, 655);
+            ClientSize = new Size(1134, 655);
             ControlBox = false;
             Controls.Add(pnlContainer);
             FormBorderStyle = FormBorderStyle.None;

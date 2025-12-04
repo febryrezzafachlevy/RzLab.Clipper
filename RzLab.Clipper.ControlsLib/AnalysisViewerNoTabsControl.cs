@@ -37,6 +37,21 @@ public class AnalysisViewerNoTabsControl : FlowLayoutPanel
         clausesSection.SetExpanded(true);
         recomSection.SetExpanded(true);
 
+        //summarySection.Dock = DockStyle.Top;
+        //risksSection.Dock = DockStyle.Top;
+        //clausesSection.Dock = DockStyle.Top;
+        //recomSection.Dock = DockStyle.Top;
+
+        summarySection.Height = 200;
+        risksSection.Height = 200;
+        clausesSection.Height = 300;
+        recomSection.Height = 200;
+
+        summarySection.Padding = new Padding(10);
+        risksSection.Padding = new Padding(10);
+        clausesSection.Padding = new Padding(10);
+        recomSection.Padding = new Padding(10);
+
         // add to root
         Controls.Add(summarySection);
         Controls.Add(risksSection);
@@ -336,11 +351,8 @@ public class AnalysisViewerNoTabsControl : FlowLayoutPanel
 
         public SectionPanel(string title)
         {
-            BackColor = Color.Transparent;
+            BackColor = Color.Red;
             AutoSize = false;
-            Margin = new Padding(4);
-            Padding = new Padding(0);
-            Width = 300;
 
             lblHeader = new Label()
             {
@@ -399,7 +411,7 @@ public class AnalysisViewerNoTabsControl : FlowLayoutPanel
                 BackColor = Color.Transparent,
                 AutoSize = false,
                 AutoScroll = false,
-                Height = 10
+                Height = 300
             };
 
             Controls.Add(bodyContainer);
@@ -414,9 +426,9 @@ public class AnalysisViewerNoTabsControl : FlowLayoutPanel
         public void SetBody(Control c)
         {
             bodyContainer.Controls.Clear();
-            c.Dock = DockStyle.Top;
+            c.Dock = DockStyle.Fill;
             bodyContainer.Controls.Add(c);
-            bodyContainer.Height = c.Height + 10;
+            //bodyContainer.Height = c.Height + 10;
         }
 
         public void SetExpanded(bool expanded)
