@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UglyToad.PdfPig.Graphics;
 
 namespace RZLab.AIAnalyzer
 {
@@ -142,8 +143,16 @@ namespace RZLab.AIAnalyzer
         {
             var documentName = txtJsonFilePath.Text;
 
+            // Copy file PDF ke folder pdf.js virtual host
+            string workspacePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "pdfjs");
+            string fileName = Path.GetFileName(documentName);
+            string destFileName = Path.Combine(workspacePath, fileName);
+
+            if (!File.Exists(destFileName))
+                File.Copy(documentName, destFileName, true);
+
             // Extract
-            var pdfMetadata = _pdfExtractor.Extract(txtJsonFilePath.Text);
+            var pdfMetadata = _pdfExtractor.Extract(destFileName);
 
             // AI processing
             //var result = await ai.Analyze(text);
