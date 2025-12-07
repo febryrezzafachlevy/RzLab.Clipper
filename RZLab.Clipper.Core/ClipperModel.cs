@@ -24,4 +24,5 @@ public class PathsModel
 {
     public string WhisperModelPath { get; set; } = string.Empty;
     public string FFmpegPath { get; set; } = string.Empty;
+    public string PDFJs { get; set; } = string.Empty;
 }

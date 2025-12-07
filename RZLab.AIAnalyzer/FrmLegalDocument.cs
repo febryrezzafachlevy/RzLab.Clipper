@@ -29,7 +29,7 @@ namespace RZLab.AIAnalyzer
         private readonly DocumentLegalStorageService _storageService;
         private readonly PdfExtractor _pdfExtractor;
         private readonly AnalysisViewerControl _aiSummaryViewer;
-        private LegalDocumentAnalysisViewer _analysisViewer;
+        private LegalDocumentSummaryCardControl _analysisViewer;
         public FrmLegalDocument()
         {
             InitializeComponent();
@@ -37,9 +37,6 @@ namespace RZLab.AIAnalyzer
             _storageService = new DocumentLegalStorageService();
             _pdfExtractor = new PdfExtractor();
             _aiSummaryViewer = new AnalysisViewerControl();
-            _analysisViewer = new LegalDocumentAnalysisViewer();
-
-            _aiSummaryViewer.Dock = DockStyle.Fill;
             //tabPage2.Controls.Clear();
             //tabPage2.Controls.Add(_aiSummaryViewer);
 
@@ -111,6 +108,8 @@ namespace RZLab.AIAnalyzer
             //darkTabControl1.Visible = _selectedDocument != null;
 
             //DocumentLegalAnalyzerGridHelper.Setup(lstView);
+            pnlHeaderDocument.Visible = false;
+            pnlHeaderDocumentType.Visible = false;
 
             InitializeDocumentType();
             LoadDataGrid();
@@ -187,43 +186,29 @@ namespace RZLab.AIAnalyzer
             btnAnalyze.Visible = _selectedDocument != null;
             btnRefresh.Visible = _selectedDocument != null;
             lblStatus.Visible = _selectedDocument != null;
+            UpdateStatus(_selectedDocument!);
             //darkTabControl1.Visible = _selectedDocument != null;
 
             //PreviewDocument();
-            SetAISummaryResult(document.analysis_result);
+            SetAISummaryResult(document);
         }
-        void SetAISummaryResult(AnalysisResultModel model)
+        void SetAISummaryResult(DocumentDataModel model)
         {
-            //_analysisViewer.BackColor = Color.Red;
-            //_analysisViewer.SetAnalysis(model);
-            //pnlAISummary.Controls.Add(_analysisViewer);
-            //_analysisViewer.BringToFront();
-            _analysisViewer.Dock = DockStyle.Fill;
+            var pageCount = model.metadata.page_count;
+            var analysResult = model.analysis_result;
+
             pnlAISummary.Controls.Clear();
-            pnlAISummary.Controls.Add(_analysisViewer);
-            _analysisViewer.SetAnalysis(model);
+
+            if (analysResult != null)
+            {
+                var summary = new LegalDocumentSummaryCardControl(analysResult.summary, pageCount, analysResult.risk_level, analysResult.recommendations);
+                var clause = new LegalDocumentClauseCardControl(analysResult.clauses);
+
+                pnlAISummary.Controls.Add(clause);
+                pnlAISummary.Controls.Add(summary);
+            }
 
         }
-        //async void PreviewDocument()
-        //{
-        //    try
-        //    {
-        //        ShowLoader(true);
-
-        //        UpdateStatus(_selectedDocument!);
-
-        //        await webView2.EnsureCoreWebView2Async(null);
-
-        //        // Handle event after PDF load
-        //        webView2.NavigationCompleted += WebView2_NavigationCompleted;
-        //        // Load PDF
-        //        webView2.CoreWebView2.Navigate(_selectedDocument!.file_path);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Gagal membuka PDF: " + ex.Message);
-        //    }
-        //}
         void ViewDetail(object? sender)
         {
             if (sender == null) return;
@@ -360,11 +345,16 @@ namespace RZLab.AIAnalyzer
                 lblStatus.Text = "NOT ANALYZED";
                 lblStatus.BackColor = Color.FromArgb(180, 90, 0); // oranye
             }
+
+            lblDocumentName.Text = documentData.file_name;
+            lblDocumentType.Text = documentData.document_type;
+            pnlHeaderDocument.Visible = true;
+            pnlHeaderDocumentType.Visible = true;
         }
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
-            if(_selectedDocument != null) OnViewDetailDocument(_selectedDocument);
+            if (_selectedDocument != null) OnViewDetailDocument(_selectedDocument);
         }
 
         private async void btnAnalyze_Click(object sender, EventArgs e)
@@ -401,17 +391,19 @@ namespace RZLab.AIAnalyzer
                 ShowLoader(false);
             }
         }
-        //private void darkTabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    if (darkTabControl1.SelectedIndex == 0) PreviewDocument();
-        //    else if (darkTabControl1.SelectedIndex == 1) PreviewAISummary();
-        //}
-
         void PreviewAISummary()
         {
             ShowLoader(true);
             _aiSummaryViewer.SetAnalysis(_selectedDocument!.analysis_result);
             ShowLoader(false);
+        }
+
+        private void btnViewDocument_Click(object sender, EventArgs e)
+        {
+            if (_selectedDocument == null) return;
+
+            var documentDetail = new FrmDocumentLegalDetail(_selectedDocument, _appSetting);
+            documentDetail.ShowDialog();
         }
     }
 }

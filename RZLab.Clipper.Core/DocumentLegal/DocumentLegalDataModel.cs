@@ -80,4 +80,9 @@ namespace RZLab.Clipper.Core.DocumentLegal
         public string Content { get; set; }
         public int PageNumber { get; set; }
     }
+    public class PDFHighlight
+    {
+        public string text { get; set; }
+        public string color { get; set; }
+    }
 }

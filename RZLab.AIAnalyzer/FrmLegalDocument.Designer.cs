@@ -32,8 +32,11 @@
             pnlBody = new Panel();
             pnlRightSide = new Panel();
             pnlAISummary = new Panel();
+            panel7 = new Panel();
+            pnlHeaderDocumentType = new Panel();
+            lblDocumentType = new Label();
             panel6 = new Panel();
-            panel5 = new Panel();
+            pnlHeaderDocument = new Panel();
             pnlDocumentName = new Panel();
             lblDocumentName = new Label();
             picDocument = new PictureBox();
@@ -50,16 +53,18 @@
             txtJsonFilePath = new TextBox();
             pnlLoader = new Panel();
             pnlHeader = new Panel();
-            btnAnalyze = new Button();
-            btnRefresh = new Button();
             label4 = new Label();
             panel1 = new Panel();
+            btnAnalyze = new Button();
+            btnRefresh = new Button();
             panel2 = new Panel();
             btnClose = new PictureBox();
+            btnViewDocument = new Button();
             pnlContainer.SuspendLayout();
             pnlBody.SuspendLayout();
             pnlRightSide.SuspendLayout();
-            panel5.SuspendLayout();
+            pnlHeaderDocumentType.SuspendLayout();
+            pnlHeaderDocument.SuspendLayout();
             pnlDocumentName.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picDocument).BeginInit();
             pnlLeftSide.SuspendLayout();
@@ -78,7 +83,7 @@
             pnlContainer.Dock = DockStyle.Fill;
             pnlContainer.Location = new Point(5, 5);
             pnlContainer.Name = "pnlContainer";
-            pnlContainer.Size = new Size(1124, 645);
+            pnlContainer.Size = new Size(1176, 673);
             pnlContainer.TabIndex = 0;
             // 
             // pnlBody
@@ -89,28 +94,66 @@
             pnlBody.Location = new Point(0, 34);
             pnlBody.Name = "pnlBody";
             pnlBody.Padding = new Padding(5);
-            pnlBody.Size = new Size(1124, 611);
+            pnlBody.Size = new Size(1176, 639);
             pnlBody.TabIndex = 2;
             // 
             // pnlRightSide
             // 
             pnlRightSide.Controls.Add(pnlAISummary);
+            pnlRightSide.Controls.Add(panel7);
+            pnlRightSide.Controls.Add(pnlHeaderDocumentType);
             pnlRightSide.Controls.Add(panel6);
-            pnlRightSide.Controls.Add(panel5);
+            pnlRightSide.Controls.Add(pnlHeaderDocument);
             pnlRightSide.Dock = DockStyle.Fill;
-            pnlRightSide.Location = new Point(411, 5);
+            pnlRightSide.Location = new Point(405, 5);
             pnlRightSide.Name = "pnlRightSide";
             pnlRightSide.Padding = new Padding(10);
-            pnlRightSide.Size = new Size(708, 601);
+            pnlRightSide.Size = new Size(766, 629);
             pnlRightSide.TabIndex = 1;
             // 
             // pnlAISummary
             // 
+            pnlAISummary.AutoScroll = true;
             pnlAISummary.Dock = DockStyle.Fill;
-            pnlAISummary.Location = new Point(10, 53);
+            pnlAISummary.Location = new Point(10, 73);
             pnlAISummary.Name = "pnlAISummary";
-            pnlAISummary.Size = new Size(688, 538);
-            pnlAISummary.TabIndex = 13;
+            pnlAISummary.Size = new Size(746, 546);
+            pnlAISummary.TabIndex = 20;
+            // 
+            // panel7
+            // 
+            panel7.BackColor = Color.Transparent;
+            panel7.Dock = DockStyle.Top;
+            panel7.Location = new Point(10, 70);
+            panel7.Name = "panel7";
+            panel7.Size = new Size(746, 3);
+            panel7.TabIndex = 19;
+            // 
+            // pnlHeaderDocumentType
+            // 
+            pnlHeaderDocumentType.BorderStyle = BorderStyle.FixedSingle;
+            pnlHeaderDocumentType.Controls.Add(btnViewDocument);
+            pnlHeaderDocumentType.Controls.Add(btnRefresh);
+            pnlHeaderDocumentType.Controls.Add(btnAnalyze);
+            pnlHeaderDocumentType.Controls.Add(lblDocumentType);
+            pnlHeaderDocumentType.Dock = DockStyle.Top;
+            pnlHeaderDocumentType.Location = new Point(10, 46);
+            pnlHeaderDocumentType.Name = "pnlHeaderDocumentType";
+            pnlHeaderDocumentType.Size = new Size(746, 24);
+            pnlHeaderDocumentType.TabIndex = 18;
+            // 
+            // lblDocumentType
+            // 
+            lblDocumentType.Dock = DockStyle.Fill;
+            lblDocumentType.FlatStyle = FlatStyle.Flat;
+            lblDocumentType.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            lblDocumentType.ForeColor = Color.WhiteSmoke;
+            lblDocumentType.Location = new Point(0, 0);
+            lblDocumentType.Name = "lblDocumentType";
+            lblDocumentType.Size = new Size(744, 22);
+            lblDocumentType.TabIndex = 2;
+            lblDocumentType.Text = "Legal Document.pdf";
+            lblDocumentType.TextAlign = ContentAlignment.MiddleLeft;
             // 
             // panel6
             // 
@@ -118,19 +161,19 @@
             panel6.Dock = DockStyle.Top;
             panel6.Location = new Point(10, 43);
             panel6.Name = "panel6";
-            panel6.Size = new Size(688, 10);
+            panel6.Size = new Size(746, 3);
             panel6.TabIndex = 12;
             // 
-            // panel5
+            // pnlHeaderDocument
             // 
-            panel5.BorderStyle = BorderStyle.FixedSingle;
-            panel5.Controls.Add(pnlDocumentName);
-            panel5.Controls.Add(lblStatus);
-            panel5.Dock = DockStyle.Top;
-            panel5.Location = new Point(10, 10);
-            panel5.Name = "panel5";
-            panel5.Size = new Size(688, 33);
-            panel5.TabIndex = 8;
+            pnlHeaderDocument.BorderStyle = BorderStyle.FixedSingle;
+            pnlHeaderDocument.Controls.Add(pnlDocumentName);
+            pnlHeaderDocument.Controls.Add(lblStatus);
+            pnlHeaderDocument.Dock = DockStyle.Top;
+            pnlHeaderDocument.Location = new Point(10, 10);
+            pnlHeaderDocument.Name = "pnlHeaderDocument";
+            pnlHeaderDocument.Size = new Size(746, 33);
+            pnlHeaderDocument.TabIndex = 8;
             // 
             // pnlDocumentName
             // 
@@ -139,18 +182,18 @@
             pnlDocumentName.Dock = DockStyle.Left;
             pnlDocumentName.Location = new Point(0, 0);
             pnlDocumentName.Name = "pnlDocumentName";
-            pnlDocumentName.Size = new Size(286, 31);
+            pnlDocumentName.Size = new Size(512, 31);
             pnlDocumentName.TabIndex = 31;
             // 
             // lblDocumentName
             // 
-            lblDocumentName.Dock = DockStyle.Left;
+            lblDocumentName.Dock = DockStyle.Fill;
             lblDocumentName.FlatStyle = FlatStyle.Flat;
             lblDocumentName.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblDocumentName.ForeColor = Color.WhiteSmoke;
             lblDocumentName.Location = new Point(37, 0);
             lblDocumentName.Name = "lblDocumentName";
-            lblDocumentName.Size = new Size(237, 31);
+            lblDocumentName.Size = new Size(475, 31);
             lblDocumentName.TabIndex = 1;
             lblDocumentName.Text = "Legal Document.pdf";
             lblDocumentName.TextAlign = ContentAlignment.MiddleLeft;
@@ -172,7 +215,7 @@
             lblStatus.Dock = DockStyle.Right;
             lblStatus.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             lblStatus.ForeColor = Color.Black;
-            lblStatus.Location = new Point(538, 0);
+            lblStatus.Location = new Point(596, 0);
             lblStatus.Margin = new Padding(2, 0, 2, 0);
             lblStatus.Name = "lblStatus";
             lblStatus.Size = new Size(148, 31);
@@ -189,7 +232,7 @@
             pnlLeftSide.Dock = DockStyle.Left;
             pnlLeftSide.Location = new Point(5, 5);
             pnlLeftSide.Name = "pnlLeftSide";
-            pnlLeftSide.Size = new Size(406, 601);
+            pnlLeftSide.Size = new Size(400, 629);
             pnlLeftSide.TabIndex = 0;
             // 
             // flowDocument
@@ -202,7 +245,7 @@
             flowDocument.Margin = new Padding(0, 0, 0, 3);
             flowDocument.Name = "flowDocument";
             flowDocument.Padding = new Padding(5);
-            flowDocument.Size = new Size(401, 523);
+            flowDocument.Size = new Size(395, 551);
             flowDocument.TabIndex = 6;
             flowDocument.WrapContents = false;
             // 
@@ -212,7 +255,7 @@
             panel3.Dock = DockStyle.Left;
             panel3.Location = new Point(0, 76);
             panel3.Name = "panel3";
-            panel3.Size = new Size(3, 523);
+            panel3.Size = new Size(3, 551);
             panel3.TabIndex = 5;
             // 
             // pnlBrowseFile
@@ -228,23 +271,23 @@
             pnlBrowseFile.Dock = DockStyle.Top;
             pnlBrowseFile.Location = new Point(0, 0);
             pnlBrowseFile.Name = "pnlBrowseFile";
-            pnlBrowseFile.Size = new Size(404, 76);
+            pnlBrowseFile.Size = new Size(398, 76);
             pnlBrowseFile.TabIndex = 2;
             // 
             // cmbDocumentType
             // 
             cmbDocumentType.FormattingEnabled = true;
-            cmbDocumentType.Location = new Point(111, 41);
+            cmbDocumentType.Location = new Point(103, 41);
             cmbDocumentType.Margin = new Padding(3, 2, 3, 2);
             cmbDocumentType.Name = "cmbDocumentType";
-            cmbDocumentType.Size = new Size(175, 23);
+            cmbDocumentType.Size = new Size(194, 23);
             cmbDocumentType.TabIndex = 31;
             // 
             // label2
             // 
             label2.Font = new Font("Segoe UI", 9F);
             label2.ForeColor = Color.White;
-            label2.Location = new Point(11, 43);
+            label2.Location = new Point(6, 43);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new Size(94, 19);
@@ -256,7 +299,7 @@
             // 
             label1.Font = new Font("Segoe UI", 9F);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(13, 13);
+            label1.Location = new Point(8, 13);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
             label1.Size = new Size(65, 19);
@@ -269,10 +312,10 @@
             btnProcess.FlatStyle = FlatStyle.Flat;
             btnProcess.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnProcess.ForeColor = Color.White;
-            btnProcess.Location = new Point(295, 40);
+            btnProcess.Location = new Point(313, 40);
             btnProcess.Margin = new Padding(2);
             btnProcess.Name = "btnProcess";
-            btnProcess.Size = new Size(100, 26);
+            btnProcess.Size = new Size(74, 26);
             btnProcess.TabIndex = 22;
             btnProcess.Text = "Upload";
             btnProcess.UseVisualStyleBackColor = true;
@@ -284,7 +327,7 @@
             btnPackagePath.FlatStyle = FlatStyle.Flat;
             btnPackagePath.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             btnPackagePath.ForeColor = Color.White;
-            btnPackagePath.Location = new Point(360, 12);
+            btnPackagePath.Location = new Point(352, 12);
             btnPackagePath.Margin = new Padding(2);
             btnPackagePath.Name = "btnPackagePath";
             btnPackagePath.Size = new Size(35, 25);
@@ -299,7 +342,7 @@
             txtJsonFilePath.BorderStyle = BorderStyle.FixedSingle;
             txtJsonFilePath.Font = new Font("Segoe UI", 9F);
             txtJsonFilePath.ForeColor = Color.White;
-            txtJsonFilePath.Location = new Point(111, 12);
+            txtJsonFilePath.Location = new Point(103, 12);
             txtJsonFilePath.Margin = new Padding(2);
             txtJsonFilePath.Name = "txtJsonFilePath";
             txtJsonFilePath.ReadOnly = true;
@@ -311,56 +354,20 @@
             pnlLoader.Location = new Point(2, 2);
             pnlLoader.Margin = new Padding(3, 2, 3, 2);
             pnlLoader.Name = "pnlLoader";
-            pnlLoader.Size = new Size(1139, 571);
+            pnlLoader.Size = new Size(1159, 628);
             pnlLoader.TabIndex = 35;
             // 
             // pnlHeader
             // 
             pnlHeader.BackColor = Color.FromArgb(48, 63, 159);
-            pnlHeader.Controls.Add(btnAnalyze);
-            pnlHeader.Controls.Add(btnRefresh);
             pnlHeader.Controls.Add(label4);
             pnlHeader.Controls.Add(panel1);
             pnlHeader.Dock = DockStyle.Top;
             pnlHeader.Location = new Point(0, 0);
             pnlHeader.Name = "pnlHeader";
             pnlHeader.Padding = new Padding(10, 0, 0, 0);
-            pnlHeader.Size = new Size(1124, 34);
+            pnlHeader.Size = new Size(1176, 34);
             pnlHeader.TabIndex = 1;
-            // 
-            // btnAnalyze
-            // 
-            btnAnalyze.BackColor = Color.FromArgb(128, 128, 255);
-            btnAnalyze.FlatAppearance.BorderSize = 0;
-            btnAnalyze.FlatStyle = FlatStyle.Flat;
-            btnAnalyze.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnAnalyze.ForeColor = Color.White;
-            btnAnalyze.Location = new Point(952, 7);
-            btnAnalyze.Margin = new Padding(2);
-            btnAnalyze.Name = "btnAnalyze";
-            btnAnalyze.Size = new Size(100, 22);
-            btnAnalyze.TabIndex = 38;
-            btnAnalyze.Text = "Analyze";
-            btnAnalyze.TextAlign = ContentAlignment.TopCenter;
-            btnAnalyze.UseVisualStyleBackColor = false;
-            btnAnalyze.Click += btnAnalyze_Click;
-            // 
-            // btnRefresh
-            // 
-            btnRefresh.BackColor = Color.FromArgb(224, 224, 224);
-            btnRefresh.FlatAppearance.BorderSize = 0;
-            btnRefresh.FlatStyle = FlatStyle.Flat;
-            btnRefresh.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-            btnRefresh.ForeColor = Color.Black;
-            btnRefresh.Location = new Point(848, 7);
-            btnRefresh.Margin = new Padding(2);
-            btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new Size(100, 22);
-            btnRefresh.TabIndex = 37;
-            btnRefresh.Text = "Reload";
-            btnRefresh.TextAlign = ContentAlignment.TopCenter;
-            btnRefresh.UseVisualStyleBackColor = false;
-            btnRefresh.Click += btnRefresh_Click;
             // 
             // label4
             // 
@@ -378,16 +385,50 @@
             // 
             panel1.Controls.Add(panel2);
             panel1.Dock = DockStyle.Right;
-            panel1.Location = new Point(1073, 0);
+            panel1.Location = new Point(916, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(51, 34);
+            panel1.Size = new Size(260, 34);
             panel1.TabIndex = 1;
+            // 
+            // btnAnalyze
+            // 
+            btnAnalyze.BackColor = Color.FromArgb(128, 128, 255);
+            btnAnalyze.FlatAppearance.BorderSize = 0;
+            btnAnalyze.FlatStyle = FlatStyle.Flat;
+            btnAnalyze.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnAnalyze.ForeColor = Color.White;
+            btnAnalyze.Location = new Point(642, -2);
+            btnAnalyze.Margin = new Padding(2);
+            btnAnalyze.Name = "btnAnalyze";
+            btnAnalyze.Size = new Size(100, 22);
+            btnAnalyze.TabIndex = 38;
+            btnAnalyze.Text = "Analyze";
+            btnAnalyze.TextAlign = ContentAlignment.TopCenter;
+            btnAnalyze.UseVisualStyleBackColor = false;
+            btnAnalyze.Click += btnAnalyze_Click;
+            // 
+            // btnRefresh
+            // 
+            btnRefresh.BackColor = Color.FromArgb(224, 224, 224);
+            btnRefresh.FlatAppearance.BorderSize = 0;
+            btnRefresh.FlatStyle = FlatStyle.Flat;
+            btnRefresh.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnRefresh.ForeColor = Color.Black;
+            btnRefresh.Location = new Point(538, -2);
+            btnRefresh.Margin = new Padding(2);
+            btnRefresh.Name = "btnRefresh";
+            btnRefresh.Size = new Size(100, 22);
+            btnRefresh.TabIndex = 37;
+            btnRefresh.Text = "Reload";
+            btnRefresh.TextAlign = ContentAlignment.TopCenter;
+            btnRefresh.UseVisualStyleBackColor = false;
+            btnRefresh.Click += btnRefresh_Click;
             // 
             // panel2
             // 
             panel2.Controls.Add(btnClose);
             panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(19, 0);
+            panel2.Location = new Point(228, 0);
             panel2.Name = "panel2";
             panel2.Padding = new Padding(2);
             panel2.Size = new Size(32, 34);
@@ -407,12 +448,29 @@
             btnClose.TabStop = false;
             btnClose.Click += btnClose_Click;
             // 
+            // btnViewDocument
+            // 
+            btnViewDocument.BackColor = Color.DodgerBlue;
+            btnViewDocument.FlatAppearance.BorderSize = 0;
+            btnViewDocument.FlatStyle = FlatStyle.Flat;
+            btnViewDocument.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            btnViewDocument.ForeColor = Color.Black;
+            btnViewDocument.Location = new Point(390, -2);
+            btnViewDocument.Margin = new Padding(2);
+            btnViewDocument.Name = "btnViewDocument";
+            btnViewDocument.Size = new Size(144, 22);
+            btnViewDocument.TabIndex = 39;
+            btnViewDocument.Text = "View Document";
+            btnViewDocument.TextAlign = ContentAlignment.TopCenter;
+            btnViewDocument.UseVisualStyleBackColor = false;
+            btnViewDocument.Click += btnViewDocument_Click;
+            // 
             // FrmLegalDocument
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.DimGray;
-            ClientSize = new Size(1134, 655);
+            ClientSize = new Size(1186, 683);
             ControlBox = false;
             Controls.Add(pnlContainer);
             FormBorderStyle = FormBorderStyle.None;
@@ -427,7 +485,8 @@
             pnlContainer.ResumeLayout(false);
             pnlBody.ResumeLayout(false);
             pnlRightSide.ResumeLayout(false);
-            panel5.ResumeLayout(false);
+            pnlHeaderDocumentType.ResumeLayout(false);
+            pnlHeaderDocument.ResumeLayout(false);
             pnlDocumentName.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)picDocument).EndInit();
             pnlLeftSide.ResumeLayout(false);
@@ -460,7 +519,7 @@
         private Panel pnlRightSide;
         private Panel panel3;
         private FlowLayoutPanel flowDocument;
-        private Panel panel5;
+        private Panel pnlHeaderDocument;
         private Panel pnlLoader;
         private Label lblStatus;
         private Button btnAnalyze;
@@ -470,5 +529,9 @@
         private Label lblDocumentName;
         private Panel panel6;
         private Panel pnlAISummary;
+        private Panel panel7;
+        private Panel pnlHeaderDocumentType;
+        private Label lblDocumentType;
+        private Button btnViewDocument;
     }
 }

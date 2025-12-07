@@ -1,4 +1,6 @@
-﻿using Microsoft.Web.WebView2.Core;
+﻿using Microsoft.VisualBasic.Devices;
+using Microsoft.Web.WebView2.Core;
+using Microsoft.Web.WebView2.WinForms;
 using RzLab.Clipper.ControlsLib;
 using RZLab.AIAnalyzer.Helpers;
 using RZLab.Clipper.Core;
@@ -13,6 +15,9 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UglyToad.PdfPig.Core;
+using UglyToad.PdfPig.Graphics;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -24,8 +29,8 @@ namespace RZLab.AIAnalyzer
         private readonly AppSettingModel _appSetting;
         private DocumentDataModel _documentData;
         private readonly DocumentLegalStorageService _storageService;
-
-        private readonly AnalysisViewerControl _aiSummaryViewer;
+        private List<PDFHighlight>? jsonClauses = null;
+        private readonly PdfViewer _pdfViewer;
         public FrmDocumentLegalDetail(DocumentDataModel documentData, AppSettingModel appSetting)
         {
             InitializeComponent();
@@ -34,16 +39,18 @@ namespace RZLab.AIAnalyzer
             _appSetting = appSetting;
             _documentData = documentData;
 
+            _pdfViewer = new PdfViewer();
+            _pdfViewer.Dock = DockStyle.Fill;
+            _pdfViewer.BringToFront();
+            pnlBody.Controls.Add(_pdfViewer);
+            pnlBody.BringToFront();
+
             this.BackColor = Color.FromArgb(25, 25, 25);
             this.Text = "Document Viewer";
-
-            _aiSummaryViewer = new AnalysisViewerControl();
-            _aiSummaryViewer.Dock = DockStyle.Fill;
-            tabPage2.Controls.Clear();
-            tabPage2.Controls.Add(_aiSummaryViewer);
-
+            //this.Shown += MainForm_Shown;
             InitializeLoader();
-            Initialize();
+            this.Shown += PdfForm_Shown;
+            //Initialize();
         }
         void InitializeLoader()
         {
@@ -68,89 +75,7 @@ namespace RZLab.AIAnalyzer
                 );
             };
             pnlLoader.BringToFront();
-        }
-        void Initialize()
-        {
-            if (_documentData.analysis_result != null)
-            {
-                btnAnalyze.Text = "Re-Analyze";
-                lblStatus.Text = "ANALYZED";
-                lblStatus.BackColor = Color.FromArgb(0, 140, 60); // hijau
-            }
-            else
-            {
-                btnAnalyze.Text = "Analyze";
-                lblStatus.Text = "NOT ANALYZED";
-                lblStatus.BackColor = Color.FromArgb(180, 90, 0); // oranye
-            }
-
-            lblDocumentName.Text = _documentData.file_name;
-            lblDocumentType.Text = _documentData.document_type;
-            PreviewDocument();
-        }
-
-        async void PreviewDocument()
-        {
-            try
-            {
-                await webView2.EnsureCoreWebView2Async(null);
-
-                ShowLoader(true);
-
-                // Handle event after PDF load
-                webView2.NavigationCompleted += WebView2_NavigationCompleted;
-                // Load PDF
-                webView2.CoreWebView2.Navigate(_documentData.file_path);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Gagal membuka PDF: " + ex.Message);
-            }
-        }
-
-        private async void btnAnalyze_Click(object sender, EventArgs e)
-        {
-            ShowLoader(true);
-            await AnalyzeAsync(_documentData);
-        }
-
-        async Task AnalyzeAsync(DocumentDataModel model)
-        {
-            var pipeline = new ContractAnalysisPipeline();
-
-            // 2. get keywords for this doc type
-            var keywords = DocumentLegalKeywordProvider.GetKeywords(model.document_type);
-
-            // 3. run pipeline (async)
-            try
-            {
-                var output = await pipeline.AnalyzeDocumentAsync(model, keywords);
-                var analysis = JsonSerializer.Deserialize<AnalysisResultModel>(output.summary,
-                    new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-                _storageService.SaveAnalysis(model.document_id, analysis!);
-                _documentData.analysis_result = analysis!;
-                //Console.WriteLine("Analysis summary:");
-                //Console.WriteLine(analysis.summary);
-                //Console.WriteLine("Risks:");
-                //foreach (var r in analysis.risks) Console.WriteLine(" - " + r);
-                Initialize();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
-            }
-
-            ShowLoader(false);
-        }
-
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-        private void WebView2_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
-        {
-            ShowLoader(false);
+            pnlLoader.Visible = false;
         }
         void ShowLoader(bool isShow)
         {
@@ -162,27 +87,151 @@ namespace RZLab.AIAnalyzer
             {
                 spinner.Visible = isShow;
             }));
-            webView2.Invoke(new Action(() =>
+            _pdfViewer.Invoke(new Action(() =>
             {
-                webView2.Visible = !isShow;
-            }));
-            btnAnalyze.Invoke(new Action(() =>
-            {
-                btnAnalyze.Visible = !isShow;
+                _pdfViewer.Visible = !isShow;
             }));
         }
-
-        private void darkTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        private async void PdfForm_Shown(object sender, EventArgs e)
         {
-            if (darkTabControl1.SelectedIndex == 0) PreviewDocument();
-            else if (darkTabControl1.SelectedIndex == 1) PreviewAISummary();
+            string? highlightKeyword = null;
+
+            BuildJsonClause();
+            if (jsonClauses != null)
+            {
+                var items = jsonClauses;
+                highlightKeyword = System.Text.Json.JsonSerializer.Serialize(items);
+            }
+
+            await _pdfViewer.LoadPdfAsync(_documentData.file_path, highlightKeyword);
         }
+        //private async Task InitPdfViewerAsync()
+        //{
+        //    ShowLoader(true);
+        //    await webView2.EnsureCoreWebView2Async();
 
-        void PreviewAISummary()
+        //    // Map the physical pdfjs folder to virtual host
+        //    string pdfJsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "pdfjs");
+        //    webView2.CoreWebView2.SetVirtualHostNameToFolderMapping(
+        //        "pdf.local",
+        //        pdfJsFolder,
+        //        CoreWebView2HostResourceAccessKind.Allow
+        //    );
+
+        //    webView2.CoreWebView2.NavigationCompleted += WebView_NavigationCompleted;
+
+        //    // optional devtools
+        //    webView2.CoreWebView2.Settings.AreDevToolsEnabled = true;
+
+        //    // listen to messages from JS
+        //    webView2.CoreWebView2.WebMessageReceived += CoreWebView2_WebMessageReceived;
+        //}
+
+        //private async void CoreWebView2_WebMessageReceived(object sender, CoreWebView2WebMessageReceivedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var msg = e.TryGetWebMessageAsString();
+        //        if (jsonClauses != null)
+        //        {
+        //            var items = jsonClauses;
+        //            string json = System.Text.Json.JsonSerializer.Serialize(items);
+        //            if (msg.Contains("viewer_ready"))
+        //            {
+        //                await Task.Delay(200);
+        //                await HighlightKeywordsAsync(json);
+        //            }
+        //            Console.WriteLine("Ready: " + msg);
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("Not Ready: " + msg);
+        //        }
+        //    }
+        //    catch { }
+        //}
+
+        //public async Task LoadPdfWithPdfJsAsync(string pdfPath)
+        //{
+        //    if (!File.Exists(pdfPath)) throw new FileNotFoundException(pdfPath);
+
+        //    if (webView2?.CoreWebView2 == null) await InitPdfViewerAsync();
+
+        //    // Ensure PDF file is located inside mapped folder. If not, copy or map its folder.
+        //    // For simplicity assume PDF is inside Resources/pdfjs folder; if not, copy it there first.
+        //    string folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "pdfjs");
+        //    string fileName = Path.GetFileName(pdfPath);
+        //    string dest = Path.Combine(folder, fileName);
+        //    if (!File.Exists(dest))
+        //    {
+        //        File.Copy(pdfPath, dest, true);
+        //    }
+
+        //    // build viewer url
+        //    string pdfVirtualUrl = $"https://pdf.local/{Uri.EscapeDataString(fileName)}";
+        //    string viewerUrl = $"https://pdf.local/viewer.html?file={Uri.EscapeDataString(pdfVirtualUrl)}";
+
+        //    webView2.CoreWebView2.Navigate(viewerUrl);
+
+        //    // optional: wait a bit for the viewer to initialize
+        //    await Task.Delay(500);
+
+
+        //}
+        void BuildJsonClause()
         {
-            ShowLoader(true);
-            _aiSummaryViewer.SetAnalysis(_documentData.analysis_result);
-            ShowLoader(false);
+            if (_documentData.analysis_result != null)
+            {
+                jsonClauses = new();
+
+                foreach (var clause in _documentData.analysis_result.clauses)
+                {
+                    Color c = clause.risk.ToUpper() switch
+                    {
+                        "HIGH" => Color.FromArgb(180, 40, 40),
+                        "MEDIUM" => Color.FromArgb(230, 140, 10),
+                        "LOW" => Color.FromArgb(40, 150, 60),
+                        _ => Color.Gray
+                    };
+
+                    var item = new PDFHighlight()
+                    {
+                        text = clause.content,
+                        color = "#" + c.Name.Substring(0, 6),
+                    };
+                    jsonClauses.Add(item);
+                }
+            }
+        }
+        //private async void WebView_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
+        //{
+        //    // Cek apakah viewer sudah load
+        //    string url = webView2.Source?.ToString() ?? "";
+
+        //    if (url.Contains("viewer.html"))
+        //    {
+        //        // Tunggu textLayer render
+        //        await Task.Delay(600);
+        //        if (jsonClauses != null)
+        //        {
+        //            var items = jsonClauses;
+        //            string json = System.Text.Json.JsonSerializer.Serialize(items);
+        //            await HighlightKeywordsAsync(json);
+        //        }
+        //    }
+
+        //    ShowLoader(false);
+        //}
+
+        // Highlight array of (text,color)
+        //public async Task HighlightKeywordsAsync(string json)
+        //{
+        //    // pastikan webView.CoreWebView2 sudah inisialisasi dan viewer telah load PDF
+        //    await webView2.CoreWebView2.ExecuteScriptAsync($"window.highlightMultiple({json});");
+        //}
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
