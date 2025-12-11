@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RZLab.AIAnalyzer", "RZLab.A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RzLab.Clipper.ControlsLib", "RzLab.Clipper.ControlsLib\RzLab.Clipper.ControlsLib.csproj", "{5746C6F1-3DDA-48C3-A99F-738C92F4168C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RZLab.AIAnalyzer.Doclitix", "RZLab.AIAnalyzer.Doclitix\RZLab.AIAnalyzer.Doclitix.csproj", "{D3DCE1C5-FE02-496D-8FE6-CF657C5A7FF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5746C6F1-3DDA-48C3-A99F-738C92F4168C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5746C6F1-3DDA-48C3-A99F-738C92F4168C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5746C6F1-3DDA-48C3-A99F-738C92F4168C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3DCE1C5-FE02-496D-8FE6-CF657C5A7FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3DCE1C5-FE02-496D-8FE6-CF657C5A7FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3DCE1C5-FE02-496D-8FE6-CF657C5A7FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3DCE1C5-FE02-496D-8FE6-CF657C5A7FF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
