@@ -1,10 +1,5 @@
 ﻿#nullable disable
-using RZLab;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RZLab.AIAnalyzer.Doclitix
 {
@@ -24,6 +19,11 @@ namespace RZLab.AIAnalyzer.Doclitix
         public string raw_text { get; set; }
 
         public AnalysisResultModel analysis_result { get; set; }
+
+        public string ConvertToString(List<PDFContent> contents)
+        {
+            return string.Join(Environment.NewLine, contents.Select(x => x.Content));
+        }
     }
 
     public class MetadataModel

@@ -1,14 +1,8 @@
-﻿using RZLab.Clipper.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 
 namespace RZLab.AIAnalyzer.Doclitix
 {
-    public class ContractAnalysisPipeline
+    public class ContractAnalysisPipeline : IContractAnalysisPipeline
     {
         private readonly IDocumentLegalAnalyzerService _analyzerService;
         private readonly IDocumentLegalStorageService _storageService;

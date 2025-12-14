@@ -1,15 +1,11 @@
 ﻿using RZLab.AIAnalyzer.Doclitix;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace RZLab.Clipper.Core
 {
-    public class DocumentLegalAnalyzerService
+    public class DocumentLegalAnalyzerService : IDocumentLegalAnalyzerService
     {
         private readonly DoclitixSetting _doclitixSetting;
         private readonly HttpClient http;
@@ -67,10 +63,10 @@ namespace RZLab.Clipper.Core
         /// Sends a prompt to OpenAI Chat Completions endpoint using response_format json_object
         /// Returns the JSON string in the "content" field (assumes model returns JSON).
         /// </summary>
-        public async Task<AnalysisResultModel> AnalyzeAsync(string text)
+        public async Task<AnalysisResultModel> AnalyzeAsync(string prompt)
         {
             var url = "https://api.openai.com/v1/chat/completions";
-            var prompt = "Analisa risiko dokumen ini:\n" + text;
+            prompt = "Analisa risiko dokumen ini:\n" + prompt;
 
             var body = new
             {

@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace RZLab.AIAnalyzer.Doclitix
 {
     public static class DocumentLegalImportantClauseExtractor
     {
         // extract candidates from clause blocks (preferred) - returns those that match keywords
-        public static List<CandidateClause> ExtractCandidatesFromPasal(
-            List<ClauseBlockModel> clauses,
-            IEnumerable<string> keywords,
-            int maxCandidates = 200)
+        public static List<CandidateClause> ExtractCandidatesFromPasal(List<ClauseBlockModel> clauses, IEnumerable<string> keywords, int maxCandidates = 200)
         {
             if (clauses == null) return new List<CandidateClause>();
             var kw = (keywords ?? Enumerable.Empty<string>()).Where(x => !string.IsNullOrWhiteSpace(x)).Select(k => k.ToLowerInvariant()).Distinct().ToArray();
@@ -21,21 +13,24 @@ namespace RZLab.AIAnalyzer.Doclitix
 
             foreach (var clause in clauses)
             {
-                var txt = (clause.Content ?? "").ToLowerInvariant();
-                var matched = new List<string>();
-                foreach (var k in kw)
+                if (clause != null)
                 {
-                    if (txt.Contains(k)) matched.Add(k);
-                }
-
-                if (matched.Count > 0)
-                {
-                    results.Add(new CandidateClause
+                    var txt = (clause.Content ?? "").ToLowerInvariant();
+                    var matched = new List<string>();
+                    foreach (var k in kw)
                     {
-                        PageNumber = clause.PageNumber,
-                        Snippet = clause.Content.Trim(),
-                        MatchedKeywords = matched.Distinct().ToList()
-                    });
+                        if (txt.Contains(k)) matched.Add(k);
+                    }
+
+                    if (matched.Count > 0)
+                    {
+                        results.Add(new CandidateClause
+                        {
+                            PageNumber = clause.PageNumber,
+                            Snippet = clause.Content.Trim(),
+                            MatchedKeywords = matched.Distinct().ToList()
+                        });
+                    }
                 }
             }
 
@@ -43,12 +38,7 @@ namespace RZLab.AIAnalyzer.Doclitix
         }
 
         // fallback: extract by paragraph lines if pasal detection yields nothing useful
-        public static List<CandidateClause> ExtractCandidatesFromPages(
-            List<PDFContent> pages,
-            IEnumerable<string> keywords,
-            int contextLines = 2,
-            int minMatchKeywords = 1,
-            int maxCandidatesPerDoc = 200)
+        public static List<CandidateClause> ExtractCandidatesFromPages(List<PDFContent> pages, IEnumerable<string> keywords, int contextLines = 2, int minMatchKeywords = 1, int maxCandidatesPerDoc = 200)
         {
             var kw = (keywords ?? Enumerable.Empty<string>()).Where(x => !string.IsNullOrWhiteSpace(x)).Select(k => k.ToLowerInvariant()).Distinct().ToArray();
             var results = new List<CandidateClause>();

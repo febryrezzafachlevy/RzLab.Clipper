@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace RZLab.AIAnalyzer.Doclitix;
-public class DocumentLegalStorageService
+public class DocumentLegalStorageService : IDocumentLegalStorageService
 {
     private readonly string dbPath = Path.Combine(Directory.GetCurrentDirectory(), "Data", "documnet_legal.db");
     public DocumentLegalStorageService()
@@ -24,7 +19,7 @@ public class DocumentLegalStorageService
         if (!File.Exists(dbPath))
             return new List<DocumentDataModel>();
 
-         string json = File.ReadAllText(dbPath);
+        string json = File.ReadAllText(dbPath);
 
         return JsonSerializer.Deserialize<List<DocumentDataModel>>(json,
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
@@ -79,12 +74,7 @@ public class DocumentLegalStorageService
     /// - minMatchKeywords: minimum distinct keywords to accept (default 1)
     /// - maxCandidatesPerDoc: limit overall candidates
     /// </summary>
-    public static List<CandidateClause> ExtractCandidates(
-        List<string> pages,
-        IEnumerable<string> keywords = null,
-        int contextLines = 2,
-        int minMatchKeywords = 1,
-        int maxCandidatesPerDoc = 200)
+    public List<CandidateClause> ExtractCandidates(List<string> pages, IEnumerable<string>? keywords = null, int contextLines = 2, int minMatchKeywords = 1, int maxCandidatesPerDoc = 200)
     {
         if (pages == null) return new List<CandidateClause>();
         var kw = (keywords ?? DefaultKeywords()).Where(x => !string.IsNullOrWhiteSpace(x)).Select(k => k.ToLowerInvariant()).Distinct().ToArray();
@@ -146,7 +136,7 @@ public class DocumentLegalStorageService
     }
 
     // Default keyword list for Indonesian/English mixed legal doc
-    public static IEnumerable<string> DefaultKeywords()
+    private IEnumerable<string> DefaultKeywords()
     {
         return new[]
         {
@@ -163,7 +153,7 @@ public class DocumentLegalStorageService
 
     // Simple heuristic for near-duplicate detection (not full Levenshtein)
     // returns small integer estimate of difference
-    private static int LevenshteinDistanceSimplified(string a, string b)
+    private int LevenshteinDistanceSimplified(string a, string b)
     {
         if (string.IsNullOrEmpty(a)) return (b ?? "").Length;
         if (string.IsNullOrEmpty(b)) return a.Length;
